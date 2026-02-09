@@ -175,12 +175,21 @@ const CourseLessonModal = ({ isOpen, onClose, setActiveScreen, lessons, onAllCom
                   <div className="w-2 h-2 rounded-full bg-pink-400"></div>
                   <div className="w-2 h-2 rounded-full bg-green-400"></div>
                 </div>
-                <p className="text-teal-600 font-semibold text-lg">GOAL ACHIEVED!</p>
-                <div className="flex justify-center gap-1 mt-2">
+                <p className="text-teal-600 font-semibold text-lg mb-4">GOAL ACHIEVED!</p>
+                <div className="flex justify-center gap-1 mb-6">
                   <div className="w-2 h-2 rounded-full bg-pink-400"></div>
                   <div className="w-2 h-2 rounded-full bg-amber-400"></div>
                   <div className="w-2 h-2 rounded-full bg-teal-400"></div>
                 </div>
+                {onAllComplete && (
+                  <button
+                    onClick={onAllComplete}
+                    data-testid="celebrate-btn"
+                    className="w-full py-3 bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-white font-semibold rounded-full transition-all"
+                  >
+                    Celebrate! 🎉
+                  </button>
+                )}
               </div>
             )}
           </div>
