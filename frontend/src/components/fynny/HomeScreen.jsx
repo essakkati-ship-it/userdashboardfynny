@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   ChevronRight, Check, Award, ChevronLeft, Target,
-  Receipt, Bell, Volume2, X,
+  Receipt, Bell, Volume2, X, Play,
   Sun, Leaf, Zap, Smile, BookOpen
 } from 'lucide-react';
 
