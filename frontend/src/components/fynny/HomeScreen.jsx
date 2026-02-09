@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import {
-  ChevronRight, Play, Check, Sparkles, Award, ChevronLeft, Target,
+  ChevronRight, Check, Award, ChevronLeft, Target,
   Receipt, Bell, Volume2, X,
-  Sun, Leaf, Zap, Smile, BookOpen, Heart
+  Sun, Leaf, Zap, Smile, BookOpen
 } from 'lucide-react';
 
 const MicrolearningSection = ({ setActiveScreen }) => (
