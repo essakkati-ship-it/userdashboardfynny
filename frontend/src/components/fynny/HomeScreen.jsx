@@ -233,6 +233,7 @@ const DiamondProgress = ({ total, completed }) => {
 // Prominent Learn with Fynny Section - Course Card Style
 const LearnWithFynnySection = ({ setActiveScreen }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const lessons = [
     { id: 1, title: 'Prepare your finances', duration: '2 min', status: 'done', screen: 'lesson' },
@@ -243,6 +244,19 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
   const completedCount = lessons.filter(l => l.status === 'done').length;
   const remainingCount = lessons.length - completedCount;
   const currentLesson = lessons.find(l => l.status === 'current') || lessons[completedCount];
+  const allCompleted = completedCount === lessons.length;
+
+  // Handle when user completes the final lesson
+  const handleLessonComplete = () => {
+    setIsModalOpen(false);
+    setShowCelebration(true);
+  };
+
+  // Handle continuing after celebration
+  const handleCelebrationContinue = () => {
+    setShowCelebration(false);
+    setActiveScreen('course-streak'); // Navigate to streak screen
+  };
 
   return (
     <>
@@ -262,8 +276,12 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
 
             {/* Content */}
             <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-gray-800 text-base sm:text-lg">Finish today's topic</h3>
-              <p className="text-gray-600 text-sm sm:text-base mt-0.5 truncate">{currentLesson?.title || 'All done!'}</p>
+              <h3 className="font-bold text-gray-800 text-base sm:text-lg">
+                {allCompleted ? 'Course complete!' : 'Finish today\'s topic'}
+              </h3>
+              <p className="text-gray-600 text-sm sm:text-base mt-0.5 truncate">
+                {allCompleted ? 'How Money Feels' : currentLesson?.title || 'All done!'}
+              </p>
               
               {/* Progress row */}
               <div className="flex items-center justify-between mt-2 sm:mt-3">
@@ -283,6 +301,17 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
         onClose={() => setIsModalOpen(false)}
         setActiveScreen={setActiveScreen}
         lessons={lessons}
+        onAllComplete={handleLessonComplete}
+      />
+
+      {/* Goal Achieved Celebration Modal */}
+      <GoalAchievedModal
+        isOpen={showCelebration}
+        onClose={() => setShowCelebration(false)}
+        onContinue={handleCelebrationContinue}
+        courseName="How Money Feels"
+        lessonsCompleted={lessons.length}
+        fynniesEarned={1}
       />
     </>
   );
