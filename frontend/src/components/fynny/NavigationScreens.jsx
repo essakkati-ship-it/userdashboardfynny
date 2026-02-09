@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  ChevronLeft, Play, Check, Star, Clock, BookOpen, Target, Heart, Mountain, Brain, Wrench
+  ChevronLeft, Play, Check, Star, Clock, BookOpen, Target, Heart, Mountain, Brain, Wrench, Sparkles
 } from 'lucide-react';
 
 // Commitment Flow Screen
