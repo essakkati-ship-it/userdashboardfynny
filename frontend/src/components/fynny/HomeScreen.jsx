@@ -377,7 +377,7 @@ const HomeScreen = ({ setActiveScreen }) => {
 
   return (
     <div className="flex gap-6" data-testid="home-screen">
-      <div className="flex-1 w-full max-w-xl">
+      <div className="flex-1 min-w-0 max-w-xl">
         {/* Week Tracker Card - AT THE TOP */}
         <div className="bg-white rounded-2xl border border-gray-200 p-5 mb-4 shadow-sm" data-testid="week-tracker">
           {/* Week Day Badges */}
