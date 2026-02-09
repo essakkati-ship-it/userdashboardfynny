@@ -238,77 +238,111 @@ const FinancialHealthScreen = ({ setActiveScreen }) => {
     </div>
   );
 
-  // FINANCIAL INSIGHTS TAB
+  // FINANCIAL INSIGHTS TAB - Original version with personalized insights
+  const insights = [
+    {
+      id: 1,
+      type: 'positive',
+      title: 'Great progress on food spending!',
+      description: 'You spent 12% less on dining out this week compared to last week.',
+      tip: 'Keep it up! Consider meal prepping on Sundays to maintain this trend.',
+      icon: Utensils,
+      color: 'green'
+    },
+    {
+      id: 2,
+      type: 'warning',
+      title: 'Entertainment spending increased',
+      description: 'Your entertainment expenses went up by 23% this month.',
+      tip: 'Try free activities like hiking or game nights at home.',
+      icon: Coffee,
+      color: 'amber'
+    },
+    {
+      id: 3,
+      type: 'insight',
+      title: 'You tend to spend more on weekends',
+      description: 'Friday and Saturday account for 45% of your weekly spending.',
+      tip: 'Set a weekend budget limit to stay on track.',
+      icon: BarChart3,
+      color: 'blue'
+    },
+    {
+      id: 4,
+      type: 'positive',
+      title: 'Consistent savings streak!',
+      description: "You've saved money every week for the past month.",
+      tip: 'Consider increasing your automatic savings by just 5%.',
+      icon: TrendingUp,
+      color: 'teal'
+    }
+  ];
+
   const renderInsightsTab = () => (
-    <div className="space-y-5">
-      {/* Debt Overview Card */}
-      <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-5 border border-pink-200 shadow-sm">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
-            <TrendingDown className="w-5 h-5 text-[#E85A99]" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-gray-800">Debt Overview</h3>
-            <p className="text-xs text-gray-500">Track your debt reduction</p>
-          </div>
+    <div className="space-y-4">
+      {/* Summary Card */}
+      <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-5 text-white">
+        <div className="flex items-center gap-2 mb-2">
+          <Lightbulb size={20} />
+          <span className="font-medium">Your Financial Snapshot</span>
         </div>
-        <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-bold text-gray-900">€2,450</span>
-          <span className="text-sm text-emerald-600 font-medium">-€320 this month</span>
+        <p className="text-white/90 text-sm mb-4">
+          Based on your spending patterns, you're doing well! Here are personalized insights to help you improve further.
+        </p>
+        <div className="flex items-center gap-2">
+          <Activity size={16} />
+          <span className="text-sm">4 new insights this week</span>
         </div>
-        <p className="text-sm text-gray-600 mt-2">At this rate, you'll be debt-free in 8 months</p>
-        <button className="mt-3 text-[#E85A99] hover:text-pink-600 font-medium text-sm flex items-center gap-1">
-          View breakdown <ArrowRight className="w-4 h-4" />
-        </button>
       </div>
 
-      {/* Net Worth Card */}
-      <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl p-5 border border-emerald-200 shadow-sm">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
-            <TrendingUp className="w-5 h-5 text-emerald-500" />
+      {/* Insight Cards */}
+      {insights.map((insight) => {
+        const IconComponent = insight.icon;
+        return (
+          <div 
+            key={insight.id} 
+            className="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm"
+            data-testid={`insight-card-${insight.id}`}
+          >
+            <div className="flex items-start gap-3">
+              <div className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 ${
+                insight.color === 'green' ? 'bg-green-100' :
+                insight.color === 'amber' ? 'bg-amber-100' :
+                insight.color === 'blue' ? 'bg-blue-100' :
+                'bg-teal-100'
+              }`}>
+                <IconComponent size={20} className={`${
+                  insight.color === 'green' ? 'text-green-600' :
+                  insight.color === 'amber' ? 'text-amber-600' :
+                  insight.color === 'blue' ? 'text-blue-600' :
+                  'text-teal-600'
+                }`} />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  {insight.type === 'positive' && (
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">Positive</span>
+                  )}
+                  {insight.type === 'warning' && (
+                    <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">Heads up</span>
+                  )}
+                  {insight.type === 'insight' && (
+                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">Pattern</span>
+                  )}
+                </div>
+                <h4 className="font-semibold text-gray-800 mb-1">{insight.title}</h4>
+                <p className="text-gray-600 text-sm mb-3">{insight.description}</p>
+                <div className="bg-gray-50 rounded-xl p-3">
+                  <div className="flex items-start gap-2">
+                    <Sparkles size={14} className="text-amber-500 mt-0.5 flex-shrink-0" />
+                    <p className="text-sm text-gray-700"><strong>Tip:</strong> {insight.tip}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div>
-            <h3 className="font-semibold text-gray-800">Net Worth</h3>
-            <p className="text-xs text-gray-500">Your total financial picture</p>
-          </div>
-        </div>
-        <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-bold text-gray-900">€8,720</span>
-          <span className="text-sm text-emerald-600 font-medium">+€1,240 this month</span>
-        </div>
-        <p className="text-sm text-gray-600 mt-2">You're building wealth faster than 72% of users</p>
-        <button className="mt-3 text-[#E85A99] hover:text-pink-600 font-medium text-sm flex items-center gap-1">
-          See assets & liabilities <ArrowRight className="w-4 h-4" />
-        </button>
-      </div>
-
-      {/* Financial Stress Age Card */}
-      <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-5 border border-indigo-200 shadow-sm">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
-            <Smile className="w-5 h-5 text-indigo-500" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-gray-800">Financial Stress Age</h3>
-            <p className="text-xs text-gray-500">How old your finances make you feel</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-6 mt-2">
-          <div className="text-center">
-            <span className="text-3xl font-bold text-gray-900">32</span>
-            <p className="text-xs text-gray-500">Your stress age</p>
-          </div>
-          <div className="text-center">
-            <span className="text-3xl font-bold text-emerald-500">25</span>
-            <p className="text-xs text-gray-500">Your actual age</p>
-          </div>
-        </div>
-        <p className="text-sm text-gray-600 mt-3">Keep learning to reduce your stress age by 5 years</p>
-        <button className="mt-3 text-[#E85A99] hover:text-pink-600 font-medium text-sm flex items-center gap-1">
-          See the future you <ArrowRight className="w-4 h-4" />
-        </button>
-      </div>
+        );
+      })}
     </div>
   );
 
