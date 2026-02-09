@@ -11,6 +11,7 @@ import FinancialHealthScreen from './FinancialHealthScreen';
 import { LiteracyCheckScreen, DailyBoostScreen, MoneyTipScreen } from './MicrolearningScreens';
 import { CommitmentFlowScreen, CommitmentsScreen, HealthScreen, PlanScreen } from './NavigationScreens';
 import { SavedLessonsScreen, PaymentPlanScreen, CalculatorsScreen, PlaceholderScreen } from './ResourceScreens';
+import { CourseStreakScreen } from './CelebrationScreens';
 
 export default function FynnyDashboard() {
   const [activeScreen, setActiveScreen] = useState('home');
@@ -26,6 +27,7 @@ export default function FynnyDashboard() {
       case 'lesson': return <LessonScreen setActiveScreen={setActiveScreen} />;
       case 'lesson-two': return <LessonTwoScreen setActiveScreen={setActiveScreen} />;
       case 'streak': return <StreakScreen setActiveScreen={setActiveScreen} />;
+      case 'course-streak': return <CourseStreakScreen setActiveScreen={setActiveScreen} />;
       case 'literacy-check': return <LiteracyCheckScreen setActiveScreen={setActiveScreen} />;
       case 'daily-boost': return <DailyBoostScreen setActiveScreen={setActiveScreen} />;
       case 'money-tip': return <MoneyTipScreen setActiveScreen={setActiveScreen} />;
@@ -38,7 +40,7 @@ export default function FynnyDashboard() {
     }
   };
 
-  const fullScreenScreens = ['lesson', 'lesson-two', 'streak', 'literacy-check', 'daily-boost', 'money-tip'];
+  const fullScreenScreens = ['lesson', 'lesson-two', 'streak', 'course-streak', 'literacy-check', 'daily-boost', 'money-tip'];
   const isFullScreen = fullScreenScreens.includes(activeScreen);
 
   if (isFullScreen) {
