@@ -27,7 +27,65 @@ Fynny is a Noom-inspired financial wellbeing app that helps users build healthy 
 
 ## What's Been Implemented
 
-### Date: February 9, 2026 (Latest)
+### Date: February 9, 2026 (Latest Session)
+
+#### ✅ Shared LessonLayout Component
+Created a reusable layout wrapper for all lesson-type screens:
+
+**New File: `/app/frontend/src/components/fynny/LessonLayout.jsx`**
+- Handles common structure: top bar, content area, bottom navigation
+- Supports multiple theme colors (rose, purple, amber, indigo, green, teal)
+- Responsive design with mobile dots and desktop progress bar
+- Exports: `LessonLayout`, `DesktopIllustration`, `MobileIllustration`
+
+#### ✅ Goal Achieved Celebration with Confetti
+Added celebration animation when all lessons in a course are completed:
+
+**New File: `/app/frontend/src/components/fynny/CelebrationScreens.jsx`**
+
+**GoalAchievedModal Features:**
+- Confetti animation (60 colorful particles falling)
+- Dark teal gradient background (Fynny brand style)
+- Trophy/Award icon with animated glow
+- "Learning goal achieved!" title with lessons count
+- Course name badge with "COURSE COMPLETE" label
+- "+X Fynny earned!" reward display
+- Bouncing celebration dots
+- "Continue" button to proceed to streak screen
+
+**Confetti Animation:**
+- 50-60 colorful particles (pink, orange, green, indigo, amber, teal)
+- Random shapes (circles and rectangles)
+- Varying sizes, speeds, and delays
+- 4-second duration with fadeout
+
+#### ✅ Course Streak Screen (After Completion)
+New screen displayed after completing a course, inspired by user's reference image:
+
+**CourseStreakScreen Features:**
+- Dark teal/navy gradient background (matching Fynny brand)
+- Large lightning bolt icon (amber/yellow) with glow effect
+- Large streak number (e.g., "5") in amber color
+- "day streak" label in white
+- Week day indicators (M T W T F S S) with circular dots
+- Completed days show amber circle with checkmark
+- Motivational text: "Leading with action—and it shows."
+- Confetti animation on load
+- "I'm committed" button at bottom (white)
+
+**Files Modified:**
+- `/app/frontend/src/components/fynny/HomeScreen.jsx`
+  - Added `showCelebration` state
+  - Integrated `GoalAchievedModal` component
+  - Added `onAllComplete` callback to `CourseLessonModal`
+  - Added "Celebrate! 🎉" button when all lessons done
+- `/app/frontend/src/components/fynny/FynnyDashboard.jsx`
+  - Added `course-streak` screen route
+  - Imported `CourseStreakScreen`
+- `/app/frontend/src/components/fynny/index.js`
+  - Exported new components
+
+### Date: February 9, 2026 (Earlier)
 
 #### ✅ Course Card with Hidden Lessons & Modal Flow
 Redesigned the "Learn with Fynny" section to match user's reference (Noom-style):
