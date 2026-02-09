@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import {
   ChevronRight, Play, Check, Sparkles, Award, ChevronLeft, Target,
-  Receipt, Bell, ChevronDown, Volume2, Bookmark,
-  Sun, Leaf, Zap, Smile, BookOpen
+  Receipt, Bell, Volume2, X,
+  Sun, Leaf, Zap, Smile, BookOpen, Heart
 } from 'lucide-react';
 
 const MicrolearningSection = ({ setActiveScreen }) => (
@@ -51,8 +51,113 @@ const MicrolearningSection = ({ setActiveScreen }) => (
   </div>
 );
 
-const TodaysPlanSection = ({ setActiveScreen }) => {
-  const [isLessonExpanded, setIsLessonExpanded] = useState(false);
+// Lesson Popup Modal - Slides up from bottom
+const LessonModal = ({ lesson, isOpen, onClose, setActiveScreen }) => {
+  if (!isOpen || !lesson) return null;
+
+  return (
+    <>
+      {/* Backdrop */}
+      <div 
+        className="fixed inset-0 bg-black/50 z-50 transition-opacity"
+        onClick={onClose}
+      />
+      
+      {/* Modal - slides up from bottom */}
+      <div className="fixed inset-x-0 bottom-0 z-50 animate-slide-up">
+        <div className="bg-white rounded-t-3xl max-h-[85vh] overflow-hidden shadow-2xl">
+          {/* Close button */}
+          <button 
+            onClick={onClose}
+            className="absolute top-4 right-4 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center z-10 transition-colors"
+            data-testid="close-lesson-modal"
+          >
+            <X size={18} className="text-gray-600" />
+          </button>
+
+          {/* Illustration Header */}
+          <div className="bg-gradient-to-br from-pink-100 via-rose-50 to-pink-50 p-8 flex items-center justify-center">
+            <div className="relative">
+              <div className="w-24 h-24 bg-gradient-to-br from-rose-400 to-pink-500 rounded-full flex items-center justify-center shadow-xl">
+                <Heart size={48} className="text-white" />
+              </div>
+              <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-400 rounded-full flex items-center justify-center">
+                <Sparkles size={16} className="text-white" />
+              </div>
+              {lesson.status === 'done' && (
+                <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-green-500 rounded-full flex items-center justify-center">
+                  <Check size={14} className="text-white" />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="p-6">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full font-medium">
+                {lesson.status === 'done' ? 'COMPLETED' : 'UP NEXT'}
+              </span>
+              <span className="text-xs text-gray-400">{lesson.duration}</span>
+            </div>
+            
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">{lesson.title}</h2>
+            <p className="text-gray-600 mb-6">
+              {lesson.id === 1 
+                ? "Learn the three simple things you need to do each day to find financial calm."
+                : lesson.id === 2
+                ? "Discover which of the four money personalities resonates most with you."
+                : "Start building awareness around your spending habits without judgment."
+              }
+            </p>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <button
+                onClick={() => { onClose(); setActiveScreen(lesson.screen); }}
+                data-testid={`modal-read-btn`}
+                className={`flex-1 flex items-center justify-center gap-2 py-4 rounded-full font-semibold text-lg transition-all ${
+                  lesson.status === 'done'
+                    ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gradient-to-r from-[#E85A99] to-rose-500 text-white shadow-lg hover:shadow-xl'
+                }`}
+              >
+                <BookOpen size={20} />
+                {lesson.status === 'done' ? 'Read again' : 'Read'}
+              </button>
+              <button
+                onClick={() => {}}
+                data-testid={`modal-listen-btn`}
+                className="flex-1 flex items-center justify-center gap-2 py-4 rounded-full font-semibold text-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all"
+              >
+                <Volume2 size={20} />
+                {lesson.status === 'done' ? 'Listen again' : 'Listen'}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes slide-up {
+          from {
+            transform: translateY(100%);
+          }
+          to {
+            transform: translateY(0);
+          }
+        }
+        .animate-slide-up {
+          animation: slide-up 0.3s ease-out;
+        }
+      `}</style>
+    </>
+  );
+};
+
+// Prominent Learn with Fynny Section - Calm/Coursera style
+const LearnWithFynnySection = ({ setActiveScreen }) => {
+  const [selectedLesson, setSelectedLesson] = useState(null);
 
   const lessons = [
     { id: 1, title: 'Prepare your finances', duration: '2 min', status: 'done', screen: 'lesson' },
@@ -60,6 +165,113 @@ const TodaysPlanSection = ({ setActiveScreen }) => {
     { id: 3, title: 'Start tracking calmly', duration: '2 min', status: 'locked', screen: null },
   ];
 
+  return (
+    <>
+      <div className="mb-6" data-testid="learn-fynny-section">
+        {/* Hero Card - Dark/Teal background like Calm */}
+        <div className="bg-gradient-to-br from-[#1a3a4a] via-[#1e4d5f] to-[#2a5f73] rounded-3xl p-6 mb-4 relative overflow-hidden">
+          {/* Background decoration */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10"></div>
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -ml-8 -mb-8"></div>
+          
+          <div className="relative z-10">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <span className="text-xs text-teal-300 font-medium uppercase tracking-wider">TODAY'S LEARNING</span>
+                <h2 className="text-white text-2xl font-bold mt-1">Learn with Fynny</h2>
+              </div>
+              <div className="flex items-center gap-1 bg-white/10 px-3 py-1.5 rounded-full">
+                <Award size={14} className="text-amber-400" />
+                <span className="text-white text-sm font-medium">+1 Fynny</span>
+              </div>
+            </div>
+
+            <p className="text-teal-100 mb-4">Your mini-course: <span className="text-white font-medium">How Money Feels</span></p>
+
+            {/* Progress indicator */}
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
+                <div className="h-full w-1/3 bg-gradient-to-r from-teal-400 to-emerald-400 rounded-full"></div>
+              </div>
+              <span className="text-teal-200 text-sm">1/3 lessons</span>
+            </div>
+
+            {/* Illustration */}
+            <div className="flex justify-center mb-4">
+              <div className="relative">
+                <div className="w-20 h-20 bg-gradient-to-br from-rose-400 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                  <Heart size={40} className="text-white" />
+                </div>
+                <Sparkles size={20} className="text-amber-400 absolute -top-2 -right-1" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Lesson List */}
+        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+          <div className="p-4 border-b border-gray-100">
+            <h3 className="font-semibold text-gray-800">Today's lessons</h3>
+          </div>
+          
+          {lessons.map((lesson, index) => (
+            <button
+              key={lesson.id}
+              onClick={() => lesson.status !== 'locked' && setSelectedLesson(lesson)}
+              disabled={lesson.status === 'locked'}
+              data-testid={`lesson-item-${lesson.id}`}
+              className={`w-full flex items-center gap-4 p-4 text-left transition-all ${
+                index !== lessons.length - 1 ? 'border-b border-gray-100' : ''
+              } ${lesson.status === 'locked' ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50 cursor-pointer'}`}
+            >
+              {/* Status indicator */}
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                lesson.status === 'done' 
+                  ? 'bg-green-500' 
+                  : lesson.status === 'current'
+                  ? 'bg-gradient-to-br from-[#E85A99] to-rose-500'
+                  : 'bg-gray-200'
+              }`}>
+                {lesson.status === 'done' ? (
+                  <Check size={20} className="text-white" />
+                ) : lesson.status === 'current' ? (
+                  <Play size={18} className="text-white ml-0.5" fill="white" />
+                ) : (
+                  <span className="text-gray-400 text-sm font-medium">{lesson.id}</span>
+                )}
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <h4 className={`font-medium ${lesson.status === 'locked' ? 'text-gray-400' : 'text-gray-800'}`}>
+                  {lesson.title}
+                </h4>
+                <p className={`text-sm ${lesson.status === 'locked' ? 'text-gray-300' : 'text-gray-500'}`}>
+                  {lesson.duration}
+                </p>
+              </div>
+
+              {/* Arrow */}
+              {lesson.status !== 'locked' && (
+                <ChevronRight size={20} className="text-gray-400" />
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Lesson Modal */}
+      <LessonModal 
+        lesson={selectedLesson}
+        isOpen={!!selectedLesson}
+        onClose={() => setSelectedLesson(null)}
+        setActiveScreen={setActiveScreen}
+      />
+    </>
+  );
+};
+
+const TodaysPlanSection = ({ setActiveScreen }) => {
   return (
     <div className="space-y-3">
       {/* Track Spending Card */}
@@ -89,100 +301,6 @@ const TodaysPlanSection = ({ setActiveScreen }) => {
             <p className="text-sm text-gray-500">How are you feeling?</p>
           </div>
         </div>
-      </div>
-
-      {/* Learn with Fynny Card - Expandable */}
-      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md transition-all" data-testid="learn-fynny-card">
-        <button onClick={() => setIsLessonExpanded(!isLessonExpanded)} className="w-full text-left p-4" data-testid="expand-lessons-btn">
-          <div className="flex items-start gap-3">
-            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-pink-100 to-rose-100 flex items-center justify-center flex-shrink-0">
-              <div className="relative">
-                <Sun size={28} className="text-pink-400" />
-                <Sparkles size={12} className="text-amber-400 absolute -top-1 -right-1" />
-              </div>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold text-gray-800">Learn with Fynny</p>
-              <p className="text-sm text-gray-600 mt-0.5">Your first mini-course: <span className="text-pink-500">How Money Feels</span></p>
-              <div className="flex items-center gap-2 mt-2">
-                <span className="text-sm text-gray-500">3 lessons today</span>
-                <div className="flex gap-1">
-                  {[1, 2, 3].map((_, i) => (
-                    <div key={i} className={`w-4 h-4 rounded ${i === 0 ? 'bg-amber-100 border border-amber-300' : 'bg-gray-100 border border-gray-200'}`}>
-                      {i === 0 && <Sparkles size={10} className="text-amber-400 m-0.5" />}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <ChevronDown size={20} className={`text-gray-400 mt-1 transition-transform duration-200 flex-shrink-0 ${isLessonExpanded ? 'rotate-180' : ''}`} />
-          </div>
-        </button>
-
-        {isLessonExpanded && (
-          <div className="border-t border-gray-100">
-            <div className="bg-gradient-to-br from-pink-100 via-pink-50 to-rose-100 p-6 flex items-center justify-center">
-              <div className="relative">
-                <Award size={48} className="text-amber-500" />
-                <Sparkles size={16} className="text-amber-400 absolute -top-1 -right-1" />
-              </div>
-            </div>
-
-            <div className="relative">
-              {lessons.map((lesson, index) => (
-                <div key={lesson.id} className={`relative ${index !== lessons.length - 1 ? 'border-b border-gray-100' : ''}`}>
-                  <div className="absolute left-5 top-0 bottom-0 flex flex-col items-center">
-                    {index > 0 && <div className="w-0.5 h-4 bg-gray-200"></div>}
-                    <div className={`w-3.5 h-3.5 rounded-full flex-shrink-0 border-2 flex items-center justify-center ${
-                      lesson.status === 'done' ? 'bg-green-500 border-green-500' :
-                      lesson.status === 'current' ? 'border-pink-400 bg-pink-100' :
-                      'border-gray-300 bg-white'
-                    }`}>
-                      {lesson.status === 'done' && <Check size={8} className="text-white" />}
-                    </div>
-                    {index < lessons.length - 1 && <div className="w-0.5 flex-1 bg-gray-200"></div>}
-                  </div>
-
-                  <div className="pl-12 pr-4 py-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className={`font-medium ${lesson.status === 'locked' ? 'text-gray-400' : 'text-gray-800'}`}>{lesson.title}</h3>
-                      <span className={`text-sm ${lesson.status === 'locked' ? 'text-gray-300' : 'text-gray-500'}`}>{lesson.duration}</span>
-                    </div>
-
-                    {(lesson.status === 'current' || lesson.status === 'done') && lesson.screen && (
-                      <div className="flex gap-2 mt-3">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setActiveScreen(lesson.screen); }}
-                          data-testid={`lesson-read-btn-${lesson.id}`}
-                          className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-medium shadow-sm transition-all ${
-                            lesson.status === 'done'
-                              ? 'text-teal-600 bg-teal-50 border border-teal-200 hover:bg-teal-100'
-                              : 'text-white bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700'
-                          }`}
-                        >
-                          <BookOpen size={16} />
-                          {lesson.status === 'done' ? 'Read again' : 'Read'}
-                        </button>
-                        <button
-                          onClick={(e) => e.stopPropagation()}
-                          data-testid={`lesson-listen-btn-${lesson.id}`}
-                          className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-medium shadow-sm transition-all ${
-                            lesson.status === 'done'
-                              ? 'text-teal-600 bg-teal-50 border border-teal-200 hover:bg-teal-100'
-                              : 'text-white bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700'
-                          }`}
-                        >
-                          <Volume2 size={16} />
-                          {lesson.status === 'done' ? 'Listen again' : 'Listen'}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Weekly Commitment Card */}
@@ -244,6 +362,9 @@ const HomeScreen = ({ setActiveScreen }) => {
   return (
     <div className="flex gap-6" data-testid="home-screen">
       <div className="flex-1 max-w-xl">
+        {/* PROMINENT: Learn with Fynny - Now at the TOP */}
+        <LearnWithFynnySection setActiveScreen={setActiveScreen} />
+
         {/* Week Tracker Card */}
         <div className="bg-white rounded-2xl border border-gray-200 p-5 mb-4 shadow-sm" data-testid="week-tracker">
           {/* Week Day Badges */}
@@ -313,7 +434,7 @@ const HomeScreen = ({ setActiveScreen }) => {
         </div>
 
         {/* Today's Plan Header */}
-        <h2 className="font-semibold text-gray-800 text-lg mb-3">Today's Plan</h2>
+        <h2 className="font-semibold text-gray-800 text-lg mb-3">Today's Tasks</h2>
 
         {/* Today's Plan Cards */}
         <TodaysPlanSection setActiveScreen={setActiveScreen} />
