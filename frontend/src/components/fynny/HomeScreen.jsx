@@ -244,10 +244,11 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
 
+  // For testing: all lessons marked as 'done' to test celebration flow
   const lessons = [
     { id: 1, title: 'Prepare your finances', duration: '2 min', status: 'done', screen: 'lesson' },
     { id: 2, title: 'Discover your money style', duration: '2 min', status: 'done', screen: 'lesson-two' },
-    { id: 3, title: 'Start tracking calmly', duration: '2 min', status: 'current', screen: 'lesson' },
+    { id: 3, title: 'Start tracking calmly', duration: '2 min', status: 'done', screen: 'lesson' },
   ];
 
   const completedCount = lessons.filter(l => l.status === 'done').length;
