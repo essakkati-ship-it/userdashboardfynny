@@ -362,10 +362,7 @@ const HomeScreen = ({ setActiveScreen }) => {
   return (
     <div className="flex gap-6" data-testid="home-screen">
       <div className="flex-1 max-w-xl">
-        {/* PROMINENT: Learn with Fynny - Now at the TOP */}
-        <LearnWithFynnySection setActiveScreen={setActiveScreen} />
-
-        {/* Week Tracker Card */}
+        {/* Week Tracker Card - AT THE TOP */}
         <div className="bg-white rounded-2xl border border-gray-200 p-5 mb-4 shadow-sm" data-testid="week-tracker">
           {/* Week Day Badges */}
           <div className="flex items-center justify-between mb-5 px-2">
@@ -432,6 +429,9 @@ const HomeScreen = ({ setActiveScreen }) => {
             <div className="w-2 h-2 rounded-full bg-gray-300"></div>
           </div>
         </div>
+
+        {/* PROMINENT: Learn with Fynny - Below Week Tracker, Above Today's Tasks */}
+        <LearnWithFynnySection setActiveScreen={setActiveScreen} />
 
         {/* Today's Plan Header */}
         <h2 className="font-semibold text-gray-800 text-lg mb-3">Today's Tasks</h2>
