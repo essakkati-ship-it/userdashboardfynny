@@ -185,7 +185,8 @@ Replaced content with structure from reference project using 3 brand colors:
 ---
 
 ## Next Tasks
-1. Add backend authentication (JWT or Google OAuth)
-2. Create MongoDB schemas for User, Progress, Commitment
-3. Wire up lesson completion to save progress
-4. Implement spending tracker with categories
+1. Refactor lesson screens to use shared reusable layout component (reduce code duplication)
+2. Add backend authentication (JWT or Google OAuth)
+3. Create MongoDB schemas for User, Progress, Commitment
+4. Wire up lesson completion to save progress
+5. Implement spending tracker with categories
