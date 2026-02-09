@@ -211,117 +211,76 @@ const CourseLessonModal = ({ isOpen, onClose, setActiveScreen, lessons }) => {
   );
 };
 
-// Prominent Learn with Fynny Section - Calm/Coursera style
+// Diamond Progress Indicator Component
+const DiamondProgress = ({ total, completed }) => {
+  return (
+    <div className="flex items-center gap-1">
+      {Array.from({ length: total }).map((_, index) => (
+        <div
+          key={index}
+          className={`w-3 h-3 rotate-45 ${
+            index < completed 
+              ? 'bg-gray-500' 
+              : 'border-2 border-gray-400 bg-transparent'
+          }`}
+        />
+      ))}
+    </div>
+  );
+};
+
+// Prominent Learn with Fynny Section - Course Card Style
 const LearnWithFynnySection = ({ setActiveScreen }) => {
-  const [selectedLesson, setSelectedLesson] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const lessons = [
     { id: 1, title: 'Prepare your finances', duration: '2 min', status: 'done', screen: 'lesson' },
-    { id: 2, title: 'Discover your money style', duration: '2 min', status: 'current', screen: 'lesson-two' },
-    { id: 3, title: 'Start tracking calmly', duration: '2 min', status: 'locked', screen: null },
+    { id: 2, title: 'Discover your money style', duration: '2 min', status: 'done', screen: 'lesson-two' },
+    { id: 3, title: 'Start tracking calmly', duration: '2 min', status: 'current', screen: 'lesson' },
   ];
+
+  const completedCount = lessons.filter(l => l.status === 'done').length;
+  const remainingCount = lessons.length - completedCount;
+  const currentLesson = lessons.find(l => l.status === 'current') || lessons[completedCount];
 
   return (
     <>
       <div className="mb-6" data-testid="learn-fynny-section">
-        {/* Hero Card - Dark/Teal background like Calm */}
-        <div className="bg-gradient-to-br from-[#1a3a4a] via-[#1e4d5f] to-[#2a5f73] rounded-3xl p-6 mb-4 relative overflow-hidden">
-          {/* Background decoration */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10"></div>
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -ml-8 -mb-8"></div>
-          
-          <div className="relative z-10">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <span className="text-xs text-teal-300 font-medium uppercase tracking-wider">TODAY'S LEARNING</span>
-                <h2 className="text-white text-2xl font-bold mt-1">Learn with Fynny</h2>
-              </div>
-              <div className="flex items-center gap-1 bg-white/10 px-3 py-1.5 rounded-full">
-                <Award size={14} className="text-amber-400" />
-                <span className="text-white text-sm font-medium">+1 Fynny</span>
-              </div>
+        {/* Course Card - Clickable to expand lessons */}
+        <button
+          onClick={() => setIsModalOpen(true)}
+          data-testid="course-card"
+          className="w-full bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-lg transition-all text-left"
+        >
+          <div className="flex items-start gap-4">
+            {/* Medal/Ribbon Icon */}
+            <div className="w-16 h-16 bg-pink-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+              <Award size={36} className="text-pink-400" strokeWidth={1.5} />
             </div>
 
-            <p className="text-teal-100 mb-4">Your mini-course: <span className="text-white font-medium">How Money Feels</span></p>
-
-            {/* Progress indicator */}
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
-                <div className="h-full w-1/3 bg-gradient-to-r from-teal-400 to-emerald-400 rounded-full"></div>
-              </div>
-              <span className="text-teal-200 text-sm">1/3 lessons</span>
-            </div>
-
-            {/* Illustration */}
-            <div className="flex justify-center mb-4">
-              <div className="relative">
-                <div className="w-20 h-20 bg-gradient-to-br from-rose-400 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
-                  <Heart size={40} className="text-white" />
-                </div>
-                <Sparkles size={20} className="text-amber-400 absolute -top-2 -right-1" />
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <h3 className="font-bold text-gray-800 text-lg">Finish today's topic</h3>
+              <p className="text-gray-600 mt-0.5">{currentLesson?.title || 'All done!'}</p>
+              
+              {/* Progress row */}
+              <div className="flex items-center justify-between mt-3">
+                <span className="text-sm text-gray-500">
+                  {remainingCount > 0 ? `${remainingCount} lesson${remainingCount > 1 ? 's' : ''} left` : 'All completed!'}
+                </span>
+                <DiamondProgress total={lessons.length} completed={completedCount} />
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Lesson List */}
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-          <div className="p-4 border-b border-gray-100">
-            <h3 className="font-semibold text-gray-800">Today's lessons</h3>
-          </div>
-          
-          {lessons.map((lesson, index) => (
-            <button
-              key={lesson.id}
-              onClick={() => lesson.status !== 'locked' && setSelectedLesson(lesson)}
-              disabled={lesson.status === 'locked'}
-              data-testid={`lesson-item-${lesson.id}`}
-              className={`w-full flex items-center gap-4 p-4 text-left transition-all ${
-                index !== lessons.length - 1 ? 'border-b border-gray-100' : ''
-              } ${lesson.status === 'locked' ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50 cursor-pointer'}`}
-            >
-              {/* Status indicator */}
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                lesson.status === 'done' 
-                  ? 'bg-green-500' 
-                  : lesson.status === 'current'
-                  ? 'bg-gradient-to-br from-[#E85A99] to-rose-500'
-                  : 'bg-gray-200'
-              }`}>
-                {lesson.status === 'done' ? (
-                  <Check size={20} className="text-white" />
-                ) : lesson.status === 'current' ? (
-                  <Play size={18} className="text-white ml-0.5" fill="white" />
-                ) : (
-                  <span className="text-gray-400 text-sm font-medium">{lesson.id}</span>
-                )}
-              </div>
-
-              {/* Content */}
-              <div className="flex-1 min-w-0">
-                <h4 className={`font-medium ${lesson.status === 'locked' ? 'text-gray-400' : 'text-gray-800'}`}>
-                  {lesson.title}
-                </h4>
-                <p className={`text-sm ${lesson.status === 'locked' ? 'text-gray-300' : 'text-gray-500'}`}>
-                  {lesson.duration}
-                </p>
-              </div>
-
-              {/* Arrow */}
-              {lesson.status !== 'locked' && (
-                <ChevronRight size={20} className="text-gray-400" />
-              )}
-            </button>
-          ))}
-        </div>
+        </button>
       </div>
 
-      {/* Lesson Modal */}
-      <LessonModal 
-        lesson={selectedLesson}
-        isOpen={!!selectedLesson}
-        onClose={() => setSelectedLesson(null)}
+      {/* Course Lesson Modal */}
+      <CourseLessonModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
         setActiveScreen={setActiveScreen}
+        lessons={lessons}
       />
     </>
   );
