@@ -27,7 +27,42 @@ Fynny is a Noom-inspired financial wellbeing app that helps users build healthy 
 
 ## What's Been Implemented
 
-### Date: February 9, 2026
+### Date: February 9, 2026 (Latest)
+
+#### ✅ Course Card with Hidden Lessons & Modal Flow
+Redesigned the "Learn with Fynny" section to match user's reference (Noom-style):
+
+**Course Card Design:**
+- Compact card with medal/ribbon icon (pink background)
+- "Finish today's topic" header with current lesson subtitle
+- Diamond progress indicators (◆◆◇) showing completed/total lessons
+- "X lesson(s) left" text
+- Click to expand and show lessons
+
+**Lesson Modal (Mobile):**
+- Slides up from bottom of screen
+- Pull indicator (rounded bar) at top
+- "Finish today's topic" or "Learning goal achieved!" header
+- Lesson list with vertical connecting line
+- Teal checkmarks for completed lessons
+- Current lesson highlighted with pink background
+- "Read" and "Listen" buttons in teal
+
+**Lesson Modal (Desktop ≥1024px):**
+- **Centered modal** (480px width)
+- Fade-in with scale animation
+- Close button (X) in top right
+- Medal icon next to current lesson
+- Same lesson list structure as mobile
+
+**Files Modified:**
+- `/app/frontend/src/components/fynny/HomeScreen.jsx`
+  - Added `DiamondProgress` component
+  - Replaced `LessonModal` with `CourseLessonModal`
+  - Redesigned `LearnWithFynnySection` as compact course card
+  - Fixed mobile layout overflow issue (`min-w-0`)
+
+### Date: February 9, 2026 (Earlier)
 
 #### ✅ Desktop Lesson Experience - Noom-Style Layout
 Applied consistent focused reading layout to ALL lesson screens for desktop (≥1024px):
