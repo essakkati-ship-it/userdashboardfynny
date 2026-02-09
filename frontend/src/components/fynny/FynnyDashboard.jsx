@@ -7,6 +7,7 @@ import HomeScreen from './HomeScreen';
 import LessonScreen from './LessonScreen';
 import LessonTwoScreen from './LessonTwoScreen';
 import StreakScreen from './StreakScreen';
+import FinancialHealthScreen from './FinancialHealthScreen';
 import { LiteracyCheckScreen, DailyBoostScreen, MoneyTipScreen } from './MicrolearningScreens';
 import { CommitmentFlowScreen, CommitmentsScreen, HealthScreen, PlanScreen } from './NavigationScreens';
 import { SavedLessonsScreen, PaymentPlanScreen, CalculatorsScreen, PlaceholderScreen } from './ResourceScreens';
