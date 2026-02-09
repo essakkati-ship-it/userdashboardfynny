@@ -252,20 +252,21 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
           data-testid="course-card"
           className="w-full bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-lg transition-all text-left"
         >
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-3 sm:gap-4">
             {/* Medal/Ribbon Icon */}
-            <div className="w-16 h-16 bg-pink-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-              <Award size={36} className="text-pink-400" strokeWidth={1.5} />
+            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-pink-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+              <Award size={32} className="text-pink-400 sm:hidden" strokeWidth={1.5} />
+              <Award size={36} className="text-pink-400 hidden sm:block" strokeWidth={1.5} />
             </div>
 
             {/* Content */}
             <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-gray-800 text-lg">Finish today's topic</h3>
-              <p className="text-gray-600 mt-0.5">{currentLesson?.title || 'All done!'}</p>
+              <h3 className="font-bold text-gray-800 text-base sm:text-lg">Finish today's topic</h3>
+              <p className="text-gray-600 text-sm sm:text-base mt-0.5 truncate">{currentLesson?.title || 'All done!'}</p>
               
               {/* Progress row */}
-              <div className="flex items-center justify-between mt-3">
-                <span className="text-sm text-gray-500">
+              <div className="flex items-center justify-between mt-2 sm:mt-3">
+                <span className="text-xs sm:text-sm text-gray-500">
                   {remainingCount > 0 ? `${remainingCount} lesson${remainingCount > 1 ? 's' : ''} left` : 'All completed!'}
                 </span>
                 <DiamondProgress total={lessons.length} completed={completedCount} />
