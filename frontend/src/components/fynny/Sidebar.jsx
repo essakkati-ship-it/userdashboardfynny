@@ -49,7 +49,21 @@ const Sidebar = ({ isOpen, setIsOpen, activeScreen, setActiveScreen }) => {
         </div>
 
         <div className="px-3 flex-1">
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mb-2">My stuff</h3>
+          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mb-2">Home</h3>
+          <nav className="space-y-0.5">
+            <button 
+              onClick={() => setActiveScreen('financial-health')} 
+              data-testid="nav-financial-health"
+              className={`w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl text-left ${activeScreen === 'financial-health' ? 'bg-teal-50 border border-teal-200' : 'hover:bg-gray-50'}`}
+            >
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-teal-100 to-emerald-100 flex items-center justify-center">
+                <Activity className="text-teal-600" size={14} />
+              </div>
+              <span className="text-gray-700 font-medium text-sm">Financial Health</span>
+            </button>
+          </nav>
+
+          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mb-2 mt-6">My stuff</h3>
           <nav className="space-y-0.5">
             <button 
               onClick={() => setActiveScreen('plan')} 
@@ -93,17 +107,6 @@ const Sidebar = ({ isOpen, setIsOpen, activeScreen, setActiveScreen }) => {
                 <Bookmark className="text-purple-500" size={14} />
               </div>
               <span className="text-gray-700 font-medium text-sm">Saved Lessons</span>
-            </button>
-
-            <button 
-              onClick={() => setActiveScreen('financial-health')} 
-              data-testid="nav-financial-health"
-              className={`w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl text-left ${activeScreen === 'financial-health' ? 'bg-teal-50 border border-teal-200' : 'hover:bg-gray-50'}`}
-            >
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-teal-100 to-emerald-100 flex items-center justify-center">
-                <Activity className="text-teal-600" size={14} />
-              </div>
-              <span className="text-gray-700 font-medium text-sm">Financial Health</span>
             </button>
           </nav>
 
