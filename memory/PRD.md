@@ -27,6 +27,30 @@ Fynny is a Noom-inspired financial wellbeing app that helps users build healthy 
 
 ## What's Been Implemented
 
+### Date: February 9, 2026
+
+#### ✅ Financial Health Feature (NEW)
+Added under "My stuff" in sidebar with 3 tabs:
+
+- **Trends Tab**
+  - Weekly spending bar chart with daily goal line ($60/day)
+  - Color-coded bars (teal for under budget, rose for over budget)
+  - Spending by category with percentage changes
+  - Monthly overview with total spent, saved, and budget used
+
+- **Financial Insights Tab**
+  - Financial Snapshot summary card
+  - 4 personalized insight cards with types (Positive, Heads up, Pattern)
+  - Actionable tips with sparkle icons
+  - Category-specific insights (food, entertainment, etc.)
+
+- **My Fynny Tab**
+  - Total Fynnies earned (47) with weekly progress
+  - Level system (Money Mindful → Budget Boss, 68%)
+  - Current streak tracker (8 days, best: 12)
+  - Achievements grid (4/6 earned)
+  - Recent activity history
+
 ### Date: February 6, 2026
 
 #### ✅ Complete Frontend UI Implementation
