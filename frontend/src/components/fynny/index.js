@@ -9,3 +9,5 @@ export { default as FinancialHealthScreen } from './FinancialHealthScreen';
 export { LiteracyCheckScreen, DailyBoostScreen, MoneyTipScreen } from './MicrolearningScreens';
 export { CommitmentFlowScreen, CommitmentsScreen, HealthScreen, PlanScreen } from './NavigationScreens';
 export { SavedLessonsScreen, PaymentPlanScreen, CalculatorsScreen, PlaceholderScreen } from './ResourceScreens';
+export { GoalAchievedModal, CourseStreakScreen, Confetti } from './CelebrationScreens';
+export { LessonLayout, DesktopIllustration, MobileIllustration } from './LessonLayout';
