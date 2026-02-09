@@ -51,9 +51,13 @@ const MicrolearningSection = ({ setActiveScreen }) => (
   </div>
 );
 
-// Lesson Popup Modal - Slides up from bottom
-const LessonModal = ({ lesson, isOpen, onClose, setActiveScreen }) => {
-  if (!isOpen || !lesson) return null;
+// Course Lesson Modal - Slides up on mobile, centered on desktop
+const CourseLessonModal = ({ isOpen, onClose, setActiveScreen, lessons }) => {
+  if (!isOpen) return null;
+
+  const completedCount = lessons.filter(l => l.status === 'done').length;
+  const allCompleted = completedCount === lessons.length;
+  const currentLesson = lessons.find(l => l.status === 'current') || lessons.find(l => l.status !== 'done');
 
   return (
     <>
@@ -63,10 +67,15 @@ const LessonModal = ({ lesson, isOpen, onClose, setActiveScreen }) => {
         onClick={onClose}
       />
       
-      {/* Modal - slides up from bottom */}
-      <div className="fixed inset-x-0 bottom-0 z-50 animate-slide-up">
-        <div className="bg-white rounded-t-3xl max-h-[85vh] overflow-hidden shadow-2xl">
-          {/* Close button */}
+      {/* Modal - slides up on mobile, centered on desktop */}
+      <div className="fixed inset-0 z-50 flex items-end lg:items-center lg:justify-center">
+        <div className="w-full lg:w-[480px] lg:max-w-[90vw] bg-white rounded-t-3xl lg:rounded-3xl max-h-[85vh] lg:max-h-[80vh] overflow-hidden shadow-2xl animate-slide-up lg:animate-fade-scale">
+          {/* Pull indicator - mobile only */}
+          <div className="lg:hidden flex justify-center pt-3 pb-1">
+            <div className="w-10 h-1 bg-gray-300 rounded-full"></div>
+          </div>
+
+          {/* Close button - desktop */}
           <button 
             onClick={onClose}
             className="absolute top-4 right-4 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center z-10 transition-colors"
@@ -75,80 +84,127 @@ const LessonModal = ({ lesson, isOpen, onClose, setActiveScreen }) => {
             <X size={18} className="text-gray-600" />
           </button>
 
-          {/* Illustration Header */}
-          <div className="bg-gradient-to-br from-pink-100 via-rose-50 to-pink-50 p-8 flex items-center justify-center">
-            <div className="relative">
-              <div className="w-24 h-24 bg-gradient-to-br from-rose-400 to-pink-500 rounded-full flex items-center justify-center shadow-xl">
-                <Heart size={48} className="text-white" />
-              </div>
-              <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-400 rounded-full flex items-center justify-center">
-                <Sparkles size={16} className="text-white" />
-              </div>
-              {lesson.status === 'done' && (
-                <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-green-500 rounded-full flex items-center justify-center">
-                  <Check size={14} className="text-white" />
-                </div>
-              )}
-            </div>
+          {/* Header */}
+          <div className="p-5 lg:p-6 border-b border-gray-100">
+            <h2 className="text-xl lg:text-2xl font-bold text-gray-800">
+              {allCompleted ? 'Learning goal achieved!' : 'Finish today\'s topic'}
+            </h2>
+            <p className="text-gray-500 text-sm mt-1">
+              {allCompleted ? `${completedCount} lessons completed` : `${lessons.length - completedCount} lesson${lessons.length - completedCount > 1 ? 's' : ''} left`}
+            </p>
           </div>
 
-          {/* Content */}
-          <div className="p-6">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full font-medium">
-                {lesson.status === 'done' ? 'COMPLETED' : 'UP NEXT'}
-              </span>
-              <span className="text-xs text-gray-400">{lesson.duration}</span>
-            </div>
-            
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">{lesson.title}</h2>
-            <p className="text-gray-600 mb-6">
-              {lesson.id === 1 
-                ? "Learn the three simple things you need to do each day to find financial calm."
-                : lesson.id === 2
-                ? "Discover which of the four money personalities resonates most with you."
-                : "Start building awareness around your spending habits without judgment."
-              }
-            </p>
+          {/* Lesson List */}
+          <div className="p-5 lg:p-6 overflow-y-auto max-h-[60vh]">
+            <div className="relative">
+              {/* Vertical line connecting lessons */}
+              <div className="absolute left-[18px] top-6 bottom-6 w-0.5 bg-gray-200"></div>
+              
+              {lessons.map((lesson, index) => {
+                const isCurrentLesson = lesson.status === 'current' || (!allCompleted && lesson.status !== 'done' && !lessons.slice(0, index).some(l => l.status !== 'done'));
+                const showActions = isCurrentLesson && !allCompleted;
 
-            {/* Action Buttons */}
-            <div className="flex gap-3">
-              <button
-                onClick={() => { onClose(); setActiveScreen(lesson.screen); }}
-                data-testid={`modal-read-btn`}
-                className={`flex-1 flex items-center justify-center gap-2 py-4 rounded-full font-semibold text-lg transition-all ${
-                  lesson.status === 'done'
-                    ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    : 'bg-gradient-to-r from-[#E85A99] to-rose-500 text-white shadow-lg hover:shadow-xl'
-                }`}
-              >
-                <BookOpen size={20} />
-                {lesson.status === 'done' ? 'Read again' : 'Read'}
-              </button>
-              <button
-                onClick={() => {}}
-                data-testid={`modal-listen-btn`}
-                className="flex-1 flex items-center justify-center gap-2 py-4 rounded-full font-semibold text-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all"
-              >
-                <Volume2 size={20} />
-                {lesson.status === 'done' ? 'Listen again' : 'Listen'}
-              </button>
+                return (
+                  <div 
+                    key={lesson.id}
+                    className={`relative ${index !== lessons.length - 1 ? 'mb-4' : ''}`}
+                  >
+                    {/* Lesson item */}
+                    <div className={`flex items-start gap-4 ${showActions ? 'bg-pink-50 rounded-2xl p-4 -mx-2' : ''}`}>
+                      {/* Status circle */}
+                      <div className={`relative z-10 w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        lesson.status === 'done' 
+                          ? 'bg-teal-500' 
+                          : showActions
+                          ? 'bg-white border-2 border-gray-300'
+                          : 'bg-white border-2 border-gray-200'
+                      }`}>
+                        {lesson.status === 'done' && (
+                          <Check size={18} className="text-white" strokeWidth={3} />
+                        )}
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex-1 min-w-0 pt-1">
+                        <div className="flex items-center justify-between">
+                          <h4 className={`font-medium ${lesson.status === 'done' ? 'text-gray-800' : 'text-gray-700'}`}>
+                            {lesson.title}
+                          </h4>
+                          <span className="text-sm text-gray-400 ml-2">{lesson.duration}</span>
+                        </div>
+
+                        {/* Action buttons for current lesson */}
+                        {showActions && (
+                          <div className="flex gap-2 mt-3">
+                            {/* Ribbon/Medal icon */}
+                            <div className="hidden lg:flex w-16 h-16 bg-pink-100 rounded-xl items-center justify-center mr-2">
+                              <Award size={32} className="text-pink-400" />
+                            </div>
+                            <button
+                              onClick={() => { onClose(); setActiveScreen(lesson.screen); }}
+                              data-testid="modal-read-btn"
+                              className="flex items-center gap-2 px-5 py-2.5 bg-teal-500 hover:bg-teal-600 text-white rounded-full font-medium transition-colors"
+                            >
+                              <BookOpen size={16} />
+                              Read
+                            </button>
+                            <button
+                              onClick={() => {}}
+                              data-testid="modal-listen-btn"
+                              className="flex items-center gap-2 px-5 py-2.5 bg-teal-500 hover:bg-teal-600 text-white rounded-full font-medium transition-colors"
+                            >
+                              <Volume2 size={16} />
+                              Listen
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
+
+            {/* Goal achieved celebration */}
+            {allCompleted && (
+              <div className="mt-6 text-center">
+                <div className="flex justify-center gap-1 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-teal-400"></div>
+                  <div className="w-2 h-2 rounded-full bg-amber-400"></div>
+                  <div className="w-2 h-2 rounded-full bg-pink-400"></div>
+                  <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                </div>
+                <p className="text-teal-600 font-semibold text-lg">GOAL ACHIEVED!</p>
+                <div className="flex justify-center gap-1 mt-2">
+                  <div className="w-2 h-2 rounded-full bg-pink-400"></div>
+                  <div className="w-2 h-2 rounded-full bg-amber-400"></div>
+                  <div className="w-2 h-2 rounded-full bg-teal-400"></div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       <style>{`
         @keyframes slide-up {
-          from {
-            transform: translateY(100%);
-          }
-          to {
-            transform: translateY(0);
-          }
+          from { transform: translateY(100%); }
+          to { transform: translateY(0); }
+        }
+        @keyframes fade-scale {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
         }
         .animate-slide-up {
           animation: slide-up 0.3s ease-out;
+        }
+        .animate-fade-scale {
+          animation: fade-scale 0.2s ease-out;
+        }
+        @media (min-width: 1024px) {
+          .animate-slide-up {
+            animation: fade-scale 0.2s ease-out;
+          }
         }
       `}</style>
     </>
