@@ -29,27 +29,32 @@ Fynny is a Noom-inspired financial wellbeing app that helps users build healthy 
 
 ### Date: February 9, 2026
 
-#### ✅ Financial Health Feature (NEW)
-Added under "My stuff" in sidebar with 3 tabs:
+#### ✅ Financial Health Feature Updated (Based on BudgetBuddy)
+Replaced content with structure from reference project using 3 brand colors:
+- **Pink (#E85A99)**: Over budget, accent color
+- **Orange (#F97316)**: At budget, Fynnies
+- **Green (emerald-500)**: Under budget, positive trends
 
-- **Trends Tab**
-  - Weekly spending bar chart with daily goal line ($60/day)
-  - Color-coded bars (teal for under budget, rose for over budget)
-  - Spending by category with percentage changes
-  - Monthly overview with total spent, saved, and budget used
+**Trends Tab (Updated):**
+- Fynnies Earned card (12 earned, +3 from last week)
+- Spending chart with 3-color system (€115 avg daily)
+- Lessons chart (22 lessons completed in 7 days)
+- Wealth Building chart (€575 saved this week)
+- Mood chart (68/100 average daily score)
 
-- **Financial Insights Tab**
-  - Financial Snapshot summary card
-  - 4 personalized insight cards with types (Positive, Heads up, Pattern)
-  - Actionable tips with sparkle icons
-  - Category-specific insights (food, entertainment, etc.)
+**Financial Insights Tab (Updated):**
+- Debt Overview (€2,450, -€320 this month, debt-free in 8 months)
+- Net Worth (€8,720, +€1,240 this month, faster than 72% of users)
+- Financial Stress Age (32 stress age vs 25 actual age)
 
-- **My Fynny Tab**
-  - Total Fynnies earned (47) with weekly progress
-  - Level system (Money Mindful → Budget Boss, 68%)
-  - Current streak tracker (8 days, best: 12)
-  - Achievements grid (4/6 earned)
-  - Recent activity history
+**My Fynny Tab (Updated):**
+- Course map journey with SVG dashed path
+- 4 modules with alternating left/right layout:
+  1. How Money Feels (completed ✓)
+  2. Success Beyond the Balance (completed ✓)
+  3. The Psychology of Money Habits (current, with play indicator)
+  4. The Secret to Lasting Financial Change (locked)
+- "Take your time. Every small step counts." encouragement
 
 ### Date: February 6, 2026
 
