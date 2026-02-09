@@ -29,6 +29,31 @@ Fynny is a Noom-inspired financial wellbeing app that helps users build healthy 
 
 ### Date: February 9, 2026
 
+#### ✅ Desktop Lesson Experience - Noom-Style Layout
+Applied consistent focused reading layout to ALL lesson screens for desktop (≥1024px):
+
+**Desktop Layout Pattern:**
+- Centered container (max-width 720px) with subtle shadow
+- Lightweight top bar: "Back to Dashboard", page title, "X of Y" progress
+- Clean centered illustrations (not card-styled)
+- Beautiful typography with generous spacing
+- Progress bar with percentage at bottom
+- "Continue" CTA button aligned right
+
+**Mobile Layout Pattern (Preserved):**
+- Card-style illustrations with gradient backgrounds
+- Full-width content
+- Progress dots at bottom
+- Full-width CTA button
+
+**Screens Updated:**
+- LessonScreen (6 pages) - rose/pink theme
+- LessonTwoScreen (5 pages) - purple theme
+- LiteracyCheckScreen (4 pages) - amber/orange theme
+- DailyBoostScreen (4 pages) - indigo/purple theme
+- MoneyTipScreen (3 pages) - green theme
+- StreakScreen - amber celebration theme
+
 #### ✅ Financial Health Feature Updated (Based on BudgetBuddy)
 Replaced content with structure from reference project using 3 brand colors:
 - **Pink (#E85A99)**: Over budget, accent color
