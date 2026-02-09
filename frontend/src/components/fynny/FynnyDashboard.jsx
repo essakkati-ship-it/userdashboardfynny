@@ -30,6 +30,7 @@ export default function FynnyDashboard() {
       case 'daily-boost': return <DailyBoostScreen setActiveScreen={setActiveScreen} />;
       case 'money-tip': return <MoneyTipScreen setActiveScreen={setActiveScreen} />;
       case 'saved': return <SavedLessonsScreen setActiveScreen={setActiveScreen} />;
+      case 'financial-health': return <FinancialHealthScreen setActiveScreen={setActiveScreen} />;
       case 'payment-plan': return <PaymentPlanScreen setActiveScreen={setActiveScreen} />;
       case 'calculators': return <CalculatorsScreen setActiveScreen={setActiveScreen} />;
       case 'settings': return <PlaceholderScreen title="Settings" setActiveScreen={setActiveScreen} />;
