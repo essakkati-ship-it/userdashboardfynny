@@ -4,6 +4,7 @@ import {
   Receipt, Bell, Volume2, X, Play,
   Sun, Leaf, Zap, Smile, BookOpen
 } from 'lucide-react';
+import { GoalAchievedModal } from './CelebrationScreens';
 
 const MicrolearningSection = ({ setActiveScreen }) => (
   <div className="mb-6">
