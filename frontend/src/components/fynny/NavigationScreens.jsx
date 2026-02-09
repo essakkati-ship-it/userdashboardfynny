@@ -279,56 +279,110 @@ export const HealthScreen = ({ setActiveScreen }) => {
         >
           <ChevronLeft size={16} /> Back
         </button>
-        <h1 className="text-2xl font-bold text-gray-800">Your Learning Path</h1>
-        <p className="text-gray-500 mt-1">Build calm, clarity and confidence step by step</p>
       </header>
 
-      <div className="relative">
-        <div className="absolute left-1/2 top-20 bottom-20 w-0 border-l-2 border-dashed border-gray-300 -translate-x-1/2 z-0"></div>
+      <div className="text-center mb-8">
+        <h1 className="text-xl font-bold text-gray-800">Your Learning Journey</h1>
+        <p className="text-sm text-gray-500 mt-1">Follow the path to financial calm</p>
+      </div>
 
-        <div className="relative z-10 space-y-5">
+      <div className="relative max-w-md mx-auto">
+        {/* Journey Path SVG */}
+        <svg
+          className="absolute left-0 top-0 w-full h-full pointer-events-none"
+          style={{ zIndex: 0 }}
+          viewBox="0 0 400 700"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M 100 60
+               C 100 120, 300 120, 300 180
+               C 300 240, 100 240, 100 300
+               C 100 360, 300 360, 300 420
+               C 300 480, 100 480, 100 540"
+            fill="none"
+            stroke="#E5E7EB"
+            strokeWidth="2"
+            strokeDasharray="8 8"
+          />
+        </svg>
+
+        {/* Modules */}
+        <div className="relative space-y-8" style={{ zIndex: 1 }}>
           {learningThemes.map((theme, index) => {
             const ThemeIcon = themeIcons[theme.id];
+            const isLeft = index % 2 === 0;
+            const isCompleted = theme.progress >= 1;
+            const isCurrent = theme.progress > 0 && theme.progress < 1;
+            
             return (
-              <button
+              <div
                 key={theme.id}
-                onClick={() => setSelectedTheme(theme.id)}
-                data-testid={`theme-card-${theme.id}`}
-                className={`w-full bg-gradient-to-br ${theme.bgColor} rounded-3xl p-5 border border-white/50 hover:shadow-xl hover:scale-[1.02] transition-all text-left shadow-sm`}
+                className={`flex items-start gap-4 ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}
               >
-                <div className={`flex items-center gap-4 ${index % 2 === 1 ? 'flex-row-reverse text-right' : ''}`}>
-                  <div className={`${theme.iconBg} w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 shadow-md`}>
-                    <ThemeIcon size={32} className={theme.iconColor} />
-                  </div>
-
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-800 text-lg mb-1">{theme.title}</h3>
-                    <p className="text-gray-600 text-sm mb-2">{theme.subtitle}</p>
-                    <div className={`flex items-center gap-1 text-gray-400 text-xs ${index % 2 === 1 ? 'justify-end' : ''}`}>
-                      <BookOpen size={12} />
-                      <span>{theme.duration}</span>
+                {/* Icon Circle */}
+                <div className={`relative flex-shrink-0 ${isLeft ? 'ml-2' : 'mr-2'}`}>
+                  <div className={`w-20 h-20 ${theme.iconBg} rounded-full flex items-center justify-center shadow-lg relative`}>
+                    <ThemeIcon className={`w-10 h-10 ${theme.iconColor}`} />
+                    {/* Sparkle decoration */}
+                    <div className="absolute -top-1 -right-1">
+                      <Sparkles className="w-4 h-4 text-amber-400" />
                     </div>
+                    {/* Completed checkmark */}
+                    {isCompleted && (
+                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center shadow">
+                        <Check className="w-4 h-4 text-white" />
+                      </div>
+                    )}
+                    {/* Current indicator */}
+                    {isCurrent && (
+                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-[#F97316] rounded-full flex items-center justify-center shadow animate-pulse">
+                        <div className="w-0 h-0 border-t-[5px] border-t-transparent border-l-[8px] border-l-white border-b-[5px] border-b-transparent ml-0.5"></div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                {theme.progress > 0 && (
-                  <div className="mt-4 pt-3 border-t border-white/50">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-xs font-medium text-gray-600">In progress</span>
-                      <span className="text-xs font-semibold text-gray-700">{Math.round(theme.progress * 100)}%</span>
-                    </div>
-                    <div className="h-2 bg-white/60 rounded-full overflow-hidden">
-                      <div className="h-full rounded-full bg-gradient-to-r from-amber-400 to-orange-400" style={{width: (theme.progress * 100) + '%'}}></div>
+                {/* Content Card */}
+                <button
+                  onClick={() => setSelectedTheme(theme.id)}
+                  data-testid={`theme-card-${theme.id}`}
+                  className={`flex-1 ${isLeft ? 'text-left' : 'text-right'}`}
+                >
+                  <div className={`inline-block bg-gradient-to-br ${theme.bgColor} rounded-2xl shadow-md hover:shadow-lg transition-all cursor-pointer border border-white/50 ${isCurrent ? 'ring-2 ring-[#E85A99]' : ''}`}>
+                    <div className="p-4 max-w-[240px]">
+                      <h4 className={`font-semibold ${isCompleted ? 'text-gray-500' : 'text-gray-800'}`}>
+                        <span className="border-b-2 border-dashed border-gray-300">{theme.title}</span>
+                      </h4>
+                      <p className="text-sm text-gray-500 mt-1">{theme.subtitle}</p>
+                      <div className={`flex items-center gap-1 text-gray-400 text-xs mt-2 ${isLeft ? '' : 'justify-end'}`}>
+                        <BookOpen size={12} />
+                        <span>{theme.duration}</span>
+                      </div>
+                      
+                      {/* Progress bar for in-progress items */}
+                      {theme.progress > 0 && (
+                        <div className="mt-3 pt-2 border-t border-white/50">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-xs font-medium text-gray-600">In progress</span>
+                            <span className="text-xs font-semibold text-gray-700">{Math.round(theme.progress * 100)}%</span>
+                          </div>
+                          <div className="h-2 bg-white/60 rounded-full overflow-hidden">
+                            <div className="h-full rounded-full bg-gradient-to-r from-amber-400 to-orange-400" style={{width: (theme.progress * 100) + '%'}}></div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                )}
-              </button>
+                </button>
+              </div>
             );
           })}
         </div>
       </div>
 
-      <div className="text-center mt-8 mb-4">
+      {/* Bottom encouragement */}
+      <div className="text-center mt-8 pt-4 border-t border-gray-100">
         <p className="text-gray-400 text-sm">Take your time. Every small step counts.</p>
       </div>
     </div>
