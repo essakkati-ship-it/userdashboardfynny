@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   X, Star, Settings, Calculator, Target, Map,
-  Bookmark, Calendar, Sparkles
+  Bookmark, Calendar, Sparkles, Activity
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, setIsOpen, activeScreen, setActiveScreen }) => {
