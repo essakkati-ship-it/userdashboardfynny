@@ -53,7 +53,7 @@ const MicrolearningSection = ({ setActiveScreen }) => (
 );
 
 // Course Lesson Modal - Slides up on mobile, centered on desktop
-const CourseLessonModal = ({ isOpen, onClose, setActiveScreen, lessons }) => {
+const CourseLessonModal = ({ isOpen, onClose, setActiveScreen, lessons, onAllComplete }) => {
   if (!isOpen) return null;
 
   const completedCount = lessons.filter(l => l.status === 'done').length;
