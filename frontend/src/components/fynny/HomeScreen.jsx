@@ -6,46 +6,78 @@ import {
 } from 'lucide-react';
 import { GoalAchievedModal } from './CelebrationScreens';
 
-// Desktop Right Column - New for you today (vertical stacking)
+// Desktop Right Column - New for you today (vertical stacking, aligned with lesson card)
 const DesktopMicrolearningColumn = ({ setActiveScreen }) => (
   <div className="hidden lg:block" data-testid="desktop-microlearning">
-    <div className="flex items-center justify-between mb-4">
-      <h2 className="font-semibold text-gray-800 text-base">New for you today</h2>
-      <span className="text-xs text-gray-400 flex items-center gap-1">
-        <Bell size={12} /> Next in 6h
-      </span>
-    </div>
+    <h2 className="font-semibold text-gray-800 text-base mb-4">New for you today</h2>
     <div className="flex flex-col gap-4">
+      {/* Literacy Check Card - Taller (170px), title dominant */}
       <button
         onClick={() => setActiveScreen('literacy-check')}
         data-testid="desktop-microlearn-literacy-check"
-        className="w-full h-[100px] bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-2xl p-4 hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer text-left flex items-center gap-4"
+        className="group w-full h-[170px] bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 rounded-2xl p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer text-left relative overflow-hidden"
       >
-        <div className="w-14 h-14 flex items-center justify-center flex-shrink-0">
-          <Sun size={32} className="text-amber-400" />
+        {/* Icon positioned top-right */}
+        <div className="absolute top-4 right-4 w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+          <Sun size={24} className="text-amber-500" />
         </div>
-        <p className="text-sm font-medium text-gray-700 leading-tight">Quick financial literacy check</p>
+        {/* Title - Bold and dominant */}
+        <div className="mt-2">
+          <span className="text-xs font-bold text-amber-600 uppercase tracking-wider">FINANCIAL CHECK</span>
+          <h3 className="text-lg font-bold text-gray-800 mt-2 leading-tight">Quick literacy check</h3>
+          <p className="text-sm text-gray-500 mt-1">Test your knowledge</p>
+        </div>
+        {/* Subtle CTA at bottom */}
+        <div className="absolute bottom-4 left-5 flex items-center gap-1 text-amber-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+          <span>Start now</span>
+          <ChevronRight size={16} />
+        </div>
       </button>
+
+      {/* Daily Boost Card - Taller (170px), title dominant */}
       <button
         onClick={() => setActiveScreen('daily-boost')}
         data-testid="desktop-microlearn-daily-boost"
-        className="w-full h-[100px] bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-4 hover:shadow-lg hover:scale-[1.02] transition-all cursor-pointer text-left"
+        className="group w-full h-[170px] bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer text-left relative overflow-hidden"
       >
-        <div className="flex justify-between items-start mb-2">
-          <span className="text-xs bg-white/90 text-indigo-600 px-2 py-0.5 rounded-full font-semibold">DAILY BOOST</span>
+        {/* Icon positioned top-right */}
+        <div className="absolute top-4 right-4 w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
           <Zap size={24} className="text-amber-300" />
         </div>
-        <p className="text-sm font-medium text-white leading-tight mt-2">On tiny shifts</p>
+        {/* Title - Bold and dominant */}
+        <div className="mt-2">
+          <span className="text-xs font-bold text-indigo-200 uppercase tracking-wider">DAILY BOOST</span>
+          <h3 className="text-lg font-bold text-white mt-2 leading-tight">On tiny shifts</h3>
+          <p className="text-sm text-indigo-200 mt-1">Small changes, big impact</p>
+        </div>
+        {/* Subtle CTA at bottom */}
+        <div className="absolute bottom-4 left-5 flex items-center gap-1 text-white text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+          <span>Read now</span>
+          <ChevronRight size={16} />
+        </div>
       </button>
+
+      {/* Money Tip Card - Taller (170px), title dominant */}
       <button
         onClick={() => setActiveScreen('money-tip')}
         data-testid="desktop-microlearn-money-tip"
-        className="w-full h-[100px] bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100 rounded-2xl p-4 hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer text-left flex items-center gap-4"
+        className="group w-full h-[170px] bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100 rounded-2xl p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer text-left relative overflow-hidden"
       >
-        <div className="w-14 h-14 flex items-center justify-center flex-shrink-0">
-          <Leaf size={32} className="text-green-500" />
+        {/* Icon positioned top-right */}
+        <div className="absolute top-4 right-4 w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+          <Leaf size={24} className="text-green-500" />
         </div>
-        <p className="text-sm font-medium text-gray-700 leading-tight">One money tip</p>
+        {/* Title - Bold and dominant */}
+        <div className="mt-2">
+          <span className="text-xs font-bold text-green-600 uppercase tracking-wider">MONEY TIP</span>
+          <h3 className="text-lg font-bold text-gray-800 mt-2 leading-tight">One daily insight</h3>
+          <p className="text-sm text-gray-500 mt-1">Practical advice</p>
+        </div>
+        {/* Subtle CTA at bottom */}
+        <div className="absolute bottom-4 left-5 flex items-center gap-1 text-green-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+          <span>Learn more</span>
+          <ChevronRight size={16} />
+        </div>
       </button>
     </div>
   </div>
