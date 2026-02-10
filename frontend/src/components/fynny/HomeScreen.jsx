@@ -427,53 +427,105 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
 
 const TodaysPlanSection = ({ setActiveScreen }) => {
   return (
-    <div className="space-y-3">
-      {/* Track Spending Card */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-md transition-all" data-testid="track-spending-card">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-br from-teal-500 to-teal-600 shadow-sm">
-            <Receipt size={20} className="text-white" />
+    <>
+      {/* Mobile Layout - Vertical stacking */}
+      <div className="space-y-3 lg:hidden">
+        {/* Track Spending Card */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-md transition-all" data-testid="track-spending-card">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-br from-teal-500 to-teal-600 shadow-sm">
+              <Receipt size={20} className="text-white" />
+            </div>
+            <span className="font-semibold text-gray-800">Track your spending</span>
           </div>
-          <span className="font-semibold text-gray-800">Track your spending</span>
-        </div>
-        <div className="ml-14">
-          <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-1">
-            <div className="h-full w-1/3 bg-gradient-to-r from-teal-400 to-teal-500 rounded-full"></div>
+          <div className="ml-14">
+            <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-1">
+              <div className="h-full w-1/3 bg-gradient-to-r from-teal-400 to-teal-500 rounded-full"></div>
+            </div>
+            <p className="text-sm text-gray-500"><span className="text-gray-800 font-medium">1</span>/3 logged today</p>
           </div>
-          <p className="text-sm text-gray-500"><span className="text-gray-800 font-medium">1</span>/3 logged today</p>
         </div>
+
+        {/* Check In Card */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-md transition-all" data-testid="check-in-card">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-br from-amber-400 to-orange-400 shadow-sm">
+              <Smile size={20} className="text-white" />
+            </div>
+            <div>
+              <span className="font-semibold text-gray-800">Check in</span>
+              <p className="text-sm text-gray-500">How are you feeling?</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Weekly Commitment Card */}
+        <button
+          onClick={() => setActiveScreen('commitment-flow')}
+          data-testid="set-commitment-btn"
+          className="w-full bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-md transition-all text-left"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-br from-pink-500 to-rose-500 shadow-sm">
+              <Target size={20} className="text-white" />
+            </div>
+            <div>
+              <span className="font-semibold text-gray-800">Set weekly commitment</span>
+              <p className="text-sm text-gray-500">Choose your focus for this week</p>
+            </div>
+          </div>
+        </button>
       </div>
 
-      {/* Check In Card */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-md transition-all" data-testid="check-in-card">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-br from-amber-400 to-orange-400 shadow-sm">
-            <Smile size={20} className="text-white" />
+      {/* Desktop Layout - Horizontal row, compact height (140-160px total) */}
+      <div className="hidden lg:grid lg:grid-cols-3 lg:gap-4">
+        {/* Track Spending Card */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-md transition-all h-[150px] flex flex-col" data-testid="desktop-track-spending-card">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-teal-500 to-teal-600 shadow-sm flex-shrink-0">
+              <Receipt size={18} className="text-white" />
+            </div>
+            <span className="font-semibold text-gray-800 text-sm">Track your spending</span>
           </div>
-          <div>
-            <span className="font-semibold text-gray-800">Check in</span>
-            <p className="text-sm text-gray-500">How are you feeling?</p>
+          <div className="flex-1 flex flex-col justify-end">
+            <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-1.5">
+              <div className="h-full w-1/3 bg-gradient-to-r from-teal-400 to-teal-500 rounded-full"></div>
+            </div>
+            <p className="text-sm text-gray-500"><span className="text-gray-800 font-medium">1</span>/3 logged today</p>
           </div>
         </div>
-      </div>
 
-      {/* Weekly Commitment Card */}
-      <button
-        onClick={() => setActiveScreen('commitment-flow')}
-        data-testid="set-commitment-btn"
-        className="w-full bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-md transition-all text-left"
-      >
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-br from-pink-500 to-rose-500 shadow-sm">
-            <Target size={20} className="text-white" />
-          </div>
-          <div>
-            <span className="font-semibold text-gray-800">Set weekly commitment</span>
-            <p className="text-sm text-gray-500">Choose your focus for this week</p>
+        {/* Check In Card */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-md transition-all h-[150px] flex flex-col" data-testid="desktop-check-in-card">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-amber-400 to-orange-400 shadow-sm flex-shrink-0">
+              <Smile size={18} className="text-white" />
+            </div>
+            <div>
+              <span className="font-semibold text-gray-800 text-sm">Check in</span>
+              <p className="text-xs text-gray-500">How are you feeling?</p>
+            </div>
           </div>
         </div>
-      </button>
-    </div>
+
+        {/* Weekly Commitment Card */}
+        <button
+          onClick={() => setActiveScreen('commitment-flow')}
+          data-testid="desktop-set-commitment-btn"
+          className="bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-md transition-all h-[150px] flex flex-col text-left"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-pink-500 to-rose-500 shadow-sm flex-shrink-0">
+              <Target size={18} className="text-white" />
+            </div>
+            <div>
+              <span className="font-semibold text-gray-800 text-sm">Set weekly commitment</span>
+              <p className="text-xs text-gray-500">Choose your focus</p>
+            </div>
+          </div>
+        </button>
+      </div>
+    </>
   );
 };
 
