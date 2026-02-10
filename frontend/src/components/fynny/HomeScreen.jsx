@@ -509,51 +509,70 @@ const TodaysPlanSection = ({ setActiveScreen }) => {
         </button>
       </div>
 
-      {/* Desktop Layout - Horizontal row, compact height (140-160px total) */}
+      {/* Desktop Layout - Engaging horizontal row with hover states and affordances */}
       <div className="hidden lg:grid lg:grid-cols-3 lg:gap-4">
-        {/* Track Spending Card */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-md transition-all h-[150px] flex flex-col" data-testid="desktop-track-spending-card">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-teal-500 to-teal-600 shadow-sm flex-shrink-0">
-              <Receipt size={18} className="text-white" />
+        {/* Track Spending Card - Fully clickable with hover */}
+        <button
+          onClick={() => {}}
+          data-testid="desktop-track-spending-card"
+          className="group bg-white rounded-2xl border border-gray-200 p-5 hover:shadow-md hover:border-teal-200 hover:bg-teal-50/30 transition-all h-[150px] flex flex-col text-left cursor-pointer"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-teal-500 to-teal-600 shadow-sm flex-shrink-0">
+                <Receipt size={18} className="text-white" />
+              </div>
+              <span className="font-semibold text-gray-800 text-sm">Track spending</span>
             </div>
-            <span className="font-semibold text-gray-800 text-sm">Track your spending</span>
+            <ChevronRight size={18} className="text-gray-300 group-hover:text-teal-500 group-hover:translate-x-0.5 transition-all" />
           </div>
           <div className="flex-1 flex flex-col justify-end">
-            <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-1.5">
+            <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden mb-2">
               <div className="h-full w-1/3 bg-gradient-to-r from-teal-400 to-teal-500 rounded-full"></div>
             </div>
-            <p className="text-sm text-gray-500"><span className="text-gray-800 font-medium">1</span>/3 logged today</p>
+            <p className="text-sm text-gray-600"><span className="text-gray-800 font-semibold">1</span>/3 logged today</p>
           </div>
-        </div>
+        </button>
 
-        {/* Check In Card */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-md transition-all h-[150px] flex flex-col" data-testid="desktop-check-in-card">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-amber-400 to-orange-400 shadow-sm flex-shrink-0">
-              <Smile size={18} className="text-white" />
-            </div>
-            <div>
+        {/* Check In Card - Fully clickable with hover */}
+        <button
+          onClick={() => {}}
+          data-testid="desktop-check-in-card"
+          className="group bg-white rounded-2xl border border-gray-200 p-5 hover:shadow-md hover:border-amber-200 hover:bg-amber-50/30 transition-all h-[150px] flex flex-col text-left cursor-pointer"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-amber-400 to-orange-400 shadow-sm flex-shrink-0">
+                <Smile size={18} className="text-white" />
+              </div>
               <span className="font-semibold text-gray-800 text-sm">Check in</span>
-              <p className="text-xs text-gray-500">How are you feeling?</p>
             </div>
+            <ChevronRight size={18} className="text-gray-300 group-hover:text-amber-500 group-hover:translate-x-0.5 transition-all" />
           </div>
-        </div>
+          <div className="flex-1 flex flex-col justify-end">
+            <p className="text-sm text-gray-600">How are you feeling?</p>
+            <p className="text-xs text-gray-400 mt-1">Tap to log your mood</p>
+          </div>
+        </button>
 
-        {/* Weekly Commitment Card */}
+        {/* Weekly Commitment Card - Fully clickable with hover */}
         <button
           onClick={() => setActiveScreen('commitment-flow')}
           data-testid="desktop-set-commitment-btn"
-          className="bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-md transition-all h-[150px] flex flex-col text-left"
+          className="group bg-white rounded-2xl border border-gray-200 p-5 hover:shadow-md hover:border-pink-200 hover:bg-pink-50/30 transition-all h-[150px] flex flex-col text-left cursor-pointer"
         >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-pink-500 to-rose-500 shadow-sm flex-shrink-0">
-              <Target size={18} className="text-white" />
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-pink-500 to-rose-500 shadow-sm flex-shrink-0">
+                <Target size={18} className="text-white" />
+              </div>
+              <span className="font-semibold text-gray-800 text-sm">Set commitment</span>
             </div>
-            <div>
-              <span className="font-semibold text-gray-800 text-sm">Set weekly commitment</span>
-              <p className="text-xs text-gray-500">Choose your focus</p>
-            </div>
+            <ChevronRight size={18} className="text-gray-300 group-hover:text-pink-500 group-hover:translate-x-0.5 transition-all" />
+          </div>
+          <div className="flex-1 flex flex-col justify-end">
+            <p className="text-sm text-gray-600">Choose your focus</p>
+            <p className="text-xs text-gray-400 mt-1">Weekly goal setting</p>
           </div>
         </button>
       </div>
