@@ -656,16 +656,16 @@ const HomeScreen = ({ setActiveScreen }) => {
   return (
     <div data-testid="home-screen">
       {/* Week Tracker Card - Full width, AT THE TOP (outside the 2-column area) */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-5 mb-4 shadow-sm" data-testid="week-tracker">
-        {/* Week Day Badges */}
-        <div className="flex items-center justify-between mb-5 px-2">
-          <button className="text-gray-300 hover:text-gray-400" data-testid="prev-week-btn">
-            <ChevronLeft size={20} />
+      <div className="bg-white rounded-2xl border border-gray-200 p-4 mb-4 shadow-sm" data-testid="week-tracker">
+        {/* Week Day Badges - Properly contained within card */}
+        <div className="flex items-center justify-center mb-5">
+          <button className="text-gray-300 hover:text-gray-400 flex-shrink-0 p-1" data-testid="prev-week-btn">
+            <ChevronLeft size={18} />
           </button>
-          <div className="flex items-center gap-3 lg:gap-5">
+          <div className="flex items-center justify-center gap-2 sm:gap-3 lg:gap-5 flex-1 max-w-[320px] lg:max-w-none mx-2">
             {weekDays.map((item, i) => (
-              <div key={i} className="flex flex-col items-center gap-1.5">
-                <div className={`w-9 h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all ${
+              <div key={i} className="flex flex-col items-center gap-1">
+                <div className={`w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all ${
                   item.status === 'complete'
                     ? item.type === 'fynny'
                       ? 'bg-gradient-to-br from-amber-400 to-orange-400 shadow-md'
@@ -678,19 +678,19 @@ const HomeScreen = ({ setActiveScreen }) => {
                 }`}>
                   {item.status === 'complete' && (
                     item.type === 'fynny'
-                      ? <Award size={16} className="text-white lg:w-5 lg:h-5" />
-                      : <Check size={16} className="text-white lg:w-5 lg:h-5" strokeWidth={3} />
+                      ? <Award size={14} className="text-white sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
+                      : <Check size={14} className="text-white sm:w-4 sm:h-4 lg:w-5 lg:h-5" strokeWidth={3} />
                   )}
-                  {item.status === 'partial' && <Award size={14} className="text-amber-500" />}
+                  {item.status === 'partial' && <Award size={12} className="text-amber-500 sm:w-3.5 sm:h-3.5" />}
                 </div>
-                <span className={`text-xs font-medium ${item.status === 'current' ? 'text-green-600' : 'text-gray-400'}`}>
+                <span className={`text-[10px] sm:text-xs font-medium ${item.status === 'current' ? 'text-green-600' : 'text-gray-400'}`}>
                   {item.day}
                 </span>
               </div>
             ))}
           </div>
-          <button className="text-gray-300 hover:text-gray-400" data-testid="next-week-btn">
-            <ChevronRight size={20} />
+          <button className="text-gray-300 hover:text-gray-400 flex-shrink-0 p-1" data-testid="next-week-btn">
+            <ChevronRight size={18} />
           </button>
         </div>
 
