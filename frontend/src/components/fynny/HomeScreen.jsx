@@ -529,31 +529,6 @@ const TodaysPlanSection = ({ setActiveScreen }) => {
   );
 };
 
-const WeeklyStepsContent = () => (
-  <div className="space-y-3">
-    {[
-      { day: 'Monday', task: 'Understand your stress trigger', status: 'done' },
-      { day: 'Tuesday', task: 'Spot your money habit', status: 'current' },
-      { day: 'Thursday', task: 'One calm admin action', status: 'pending' },
-    ].map((item, i) => (
-      <div key={i} className="flex items-start gap-2.5">
-        <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-          item.status === 'done' ? 'bg-gradient-to-br from-green-400 to-green-500' :
-          item.status === 'current' ? 'bg-gradient-to-br from-pink-400 to-pink-500' :
-          'border-2 border-gray-300'
-        }`}>
-          {item.status === 'done' && <Check className="text-white" size={10} />}
-          {item.status === 'current' && <Play className="text-white" size={8} fill="white" />}
-        </div>
-        <div>
-          <p className={`text-xs font-semibold ${item.status === 'current' ? 'text-pink-500' : 'text-gray-700'}`}>{item.day}</p>
-          <p className="text-xs text-gray-500">{item.task}</p>
-        </div>
-      </div>
-    ))}
-  </div>
-);
-
 const HomeScreen = ({ setActiveScreen }) => {
   const weekDays = [
     { day: 'M', status: 'complete', type: 'fynny' },
