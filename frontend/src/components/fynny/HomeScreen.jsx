@@ -356,40 +356,40 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
           data-testid="course-card"
           className="w-full bg-white rounded-2xl border border-gray-200 p-4 lg:p-6 hover:shadow-lg transition-all text-left lg:min-h-[280px]"
         >
-          {/* Mobile Layout - Larger, more significant */}
-          <div className="flex flex-col gap-3 sm:gap-4 lg:hidden p-1">
+          {/* Mobile Layout - Left-aligned, double height of check-in */}
+          <div className="flex items-start gap-3 sm:gap-4 lg:hidden">
             {/* Medal/Ribbon Icon */}
-            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-pink-100 rounded-2xl flex items-center justify-center flex-shrink-0 mx-auto">
-              <Award size={36} className="text-pink-400 sm:hidden" strokeWidth={1.5} />
-              <Award size={44} className="text-pink-400 hidden sm:block" strokeWidth={1.5} />
+            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-pink-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+              <Award size={32} className="text-pink-400 sm:hidden" strokeWidth={1.5} />
+              <Award size={36} className="text-pink-400 hidden sm:block" strokeWidth={1.5} />
             </div>
 
-            {/* Content - Centered */}
-            <div className="text-center">
-              <h3 className="font-bold text-gray-800 text-lg sm:text-xl">
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <h3 className="font-bold text-gray-800 text-base sm:text-lg">
                 {allCompleted ? 'Course complete!' : 'Finish today\'s topic'}
               </h3>
-              <p className="text-gray-600 text-sm sm:text-base mt-1">
+              <p className="text-gray-600 text-sm mt-0.5">
                 How Money Feels
               </p>
-            </div>
-
-            {/* Current lesson highlight */}
-            <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-xl p-4 mt-1">
-              <p className="text-xs text-pink-500 font-semibold uppercase tracking-wide mb-1.5 text-center">
-                {allCompleted ? 'ALL LESSONS COMPLETED' : 'UP NEXT'}
-              </p>
-              <h4 className="text-base font-normal text-gray-800 text-center">
-                {allCompleted ? 'Great job!' : currentLesson?.title || 'All done!'}
-              </h4>
-            </div>
               
-            {/* Progress row */}
-            <div className="flex items-center justify-between mt-1 px-1">
-              <span className="text-xs text-gray-500">
-                {remainingCount > 0 ? `${remainingCount} lesson${remainingCount > 1 ? 's' : ''} left` : 'All completed!'}
-              </span>
-              <DiamondProgress total={lessons.length} completed={completedCount} />
+              {/* Current lesson highlight */}
+              <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-lg p-3 mt-2">
+                <p className="text-[10px] text-pink-500 font-semibold uppercase tracking-wide mb-1">
+                  {allCompleted ? 'COMPLETED' : 'UP NEXT'}
+                </p>
+                <p className="text-sm text-gray-800">
+                  {allCompleted ? 'Great job!' : currentLesson?.title || 'All done!'}
+                </p>
+              </div>
+              
+              {/* Progress row */}
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-xs text-gray-500">
+                  {remainingCount > 0 ? `${remainingCount} lesson${remainingCount > 1 ? 's' : ''} left` : 'All completed!'}
+                </span>
+                <DiamondProgress total={lessons.length} completed={completedCount} />
+              </div>
             </div>
           </div>
 
