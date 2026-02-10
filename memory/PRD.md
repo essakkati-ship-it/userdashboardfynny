@@ -27,7 +27,59 @@ Fynny is a Noom-inspired financial wellbeing app that helps users build healthy 
 
 ## What's Been Implemented
 
-### Date: February 9, 2026 (Latest Session)
+### Date: February 10, 2026 (Latest)
+
+#### ✅ Desktop 3-Column Layout Redesign
+Major desktop-only layout adjustment to make the dashboard wider, calmer, and more learning-focused:
+
+**Layout Structure:**
+- Left navigation: ~18-20% width (unchanged)
+- Main content (center): ~55-60% width (wider than before)
+- Right column: ~22-25% width (NEW - "New for you today")
+
+**Vertical Order (Center Column):**
+1. Week calendar (at top - unchanged)
+2. Main Lesson (below calendar - prominent focal point)
+3. Today's Tasks (below lesson - compact)
+
+**Main Lesson Card Changes (Desktop):**
+- Height: ~280px (25-30% taller than before)
+- Width: 100% of center column
+- Larger medal icon (44px)
+- Pink "UP NEXT" highlight section with current lesson
+- Read/Listen buttons in teal
+- Primary focal point of the dashboard
+
+**Today's Tasks Changes (Desktop):**
+- Horizontal 3-column grid layout (vs vertical stacking)
+- Height: ~150px per card (compact)
+- Smaller icons (18px vs 20px)
+- Functional and supportive, not dominant
+
+**"New for you today" → Right Column:**
+- Moved from center column (horizontal scroll) to dedicated right column
+- Vertically stacked cards (one per row)
+- Card height: ~100px
+- Vertical spacing: 16px (gap-4)
+- Cards unchanged: literacy check, daily boost, money tip
+
+**Removed:**
+- "This Week's Focus" sidebar (right side)
+
+**Mobile Layout:** Unchanged (all changes desktop-only)
+
+**Files Modified:**
+- `/app/frontend/src/components/fynny/HomeScreen.jsx`
+  - Added `DesktopMicrolearningColumn` component (vertical stack)
+  - Added `MobileMicrolearningSection` component (horizontal scroll)
+  - Updated `TodaysPlanSection` with desktop horizontal grid
+  - Updated `LearnWithFynnySection` with taller desktop card
+  - Removed `WeeklyStepsContent` component
+  - New 3-column responsive layout with lg: breakpoint
+
+---
+
+### Date: February 9, 2026 (Previous Session)
 
 #### ✅ Shared LessonLayout Component
 Created a reusable layout wrapper for all lesson-type screens:
