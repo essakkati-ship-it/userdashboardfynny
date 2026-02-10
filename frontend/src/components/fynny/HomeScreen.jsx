@@ -458,11 +458,50 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
 };
 
 const TodaysPlanSection = ({ setActiveScreen }) => {
+  // Task states - in a real app these would come from backend/state
+  const tasks = {
+    checkIn: { completed: true, value: 'Feeling calm' }, // Example: already logged
+    trackSpending: { completed: false, progress: 1, total: 3 },
+    setCommitment: { completed: false },
+  };
+
   return (
     <>
-      {/* Mobile Layout - Vertical stacking */}
+      {/* Mobile Layout - Vertical stacking (order: Check-in, Track spending, Set commitment) */}
       <div className="space-y-3 lg:hidden">
-        {/* Track Spending Card */}
+        {/* 1. Check In Card - FIRST (easiest task) */}
+        {tasks.checkIn.completed ? (
+          // COMPLETED STATE - Softened, muted appearance
+          <div className="bg-gray-50 rounded-2xl border border-gray-100 p-4 opacity-80" data-testid="check-in-card-done">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-full flex items-center justify-center border-2 border-amber-200 bg-amber-50">
+                <Check size={20} className="text-amber-500" strokeWidth={3} />
+              </div>
+              <div>
+                <span className="font-medium text-gray-500">Mood logged</span>
+                <p className="text-sm text-gray-400">{tasks.checkIn.value}</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          // ACTIVE STATE
+          <div className="bg-white rounded-2xl border-2 border-amber-200 p-4 shadow-sm" data-testid="check-in-card">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-br from-amber-400 to-orange-400 shadow-sm">
+                <Smile size={20} className="text-white" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-gray-800">Check in</span>
+                  <span className="text-[10px] bg-amber-100 text-amber-600 px-1.5 py-0.5 rounded font-medium">START HERE</span>
+                </div>
+                <p className="text-sm text-gray-500">How are you feeling?</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 2. Track Spending Card */}
         <div className="bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-md transition-all" data-testid="track-spending-card">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-br from-teal-500 to-teal-600 shadow-sm">
@@ -478,20 +517,7 @@ const TodaysPlanSection = ({ setActiveScreen }) => {
           </div>
         </div>
 
-        {/* Check In Card */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-md transition-all" data-testid="check-in-card">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-br from-amber-400 to-orange-400 shadow-sm">
-              <Smile size={20} className="text-white" />
-            </div>
-            <div>
-              <span className="font-semibold text-gray-800">Check in</span>
-              <p className="text-sm text-gray-500">How are you feeling?</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Weekly Commitment Card */}
+        {/* 3. Weekly Commitment Card */}
         <button
           onClick={() => setActiveScreen('commitment-flow')}
           data-testid="set-commitment-btn"
@@ -509,9 +535,55 @@ const TodaysPlanSection = ({ setActiveScreen }) => {
         </button>
       </div>
 
-      {/* Desktop Layout - Engaging horizontal row with hover states and affordances */}
+      {/* Desktop Layout - Engaging horizontal row (order: Check-in, Track spending, Set commitment) */}
       <div className="hidden lg:grid lg:grid-cols-3 lg:gap-4">
-        {/* Track Spending Card - Fully clickable with hover */}
+        {/* 1. Check In Card - FIRST (easiest task, "Start here" cue) */}
+        {tasks.checkIn.completed ? (
+          // COMPLETED STATE - Softened, muted appearance with checkmark
+          <div 
+            className="bg-gray-50/80 rounded-2xl border border-gray-100 p-5 h-[150px] flex flex-col cursor-default"
+            data-testid="desktop-check-in-card-done"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center border-2 border-amber-200 bg-amber-50 flex-shrink-0">
+                  <Check size={18} className="text-amber-500" strokeWidth={3} />
+                </div>
+                <span className="font-medium text-gray-400 text-sm">Mood logged</span>
+              </div>
+            </div>
+            <div className="flex-1 flex flex-col justify-end">
+              <p className="text-sm text-gray-500">{tasks.checkIn.value}</p>
+              <p className="text-xs text-gray-300 mt-1">Completed today</p>
+            </div>
+          </div>
+        ) : (
+          // ACTIVE STATE - "Start here" emphasis with glow
+          <button
+            onClick={() => {}}
+            data-testid="desktop-check-in-card"
+            className="group bg-white rounded-2xl border-2 border-amber-300 p-5 hover:shadow-lg hover:border-amber-400 hover:bg-amber-50/30 transition-all h-[150px] flex flex-col text-left cursor-pointer shadow-[0_0_12px_rgba(251,191,36,0.15)]"
+          >
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-amber-400 to-orange-400 shadow-md flex-shrink-0 ring-2 ring-amber-200 ring-offset-2">
+                  <Smile size={18} className="text-white" />
+                </div>
+                <span className="font-semibold text-gray-800 text-sm">Check in</span>
+              </div>
+              <span className="text-[10px] bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-bold uppercase tracking-wide">Start here</span>
+            </div>
+            <div className="flex-1 flex flex-col justify-end">
+              <p className="text-sm text-gray-600">How are you feeling?</p>
+              <div className="flex items-center gap-1 mt-1">
+                <p className="text-xs text-amber-600 font-medium">Tap to log your mood</p>
+                <ChevronRight size={14} className="text-amber-400" />
+              </div>
+            </div>
+          </button>
+        )}
+
+        {/* 2. Track Spending Card - Second (shows progress, partially done) */}
         <button
           onClick={() => {}}
           data-testid="desktop-track-spending-card"
@@ -528,34 +600,13 @@ const TodaysPlanSection = ({ setActiveScreen }) => {
           </div>
           <div className="flex-1 flex flex-col justify-end">
             <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden mb-2">
-              <div className="h-full w-1/3 bg-gradient-to-r from-teal-400 to-teal-500 rounded-full"></div>
+              <div className="h-full w-1/3 bg-gradient-to-r from-teal-400 to-teal-500 rounded-full transition-all"></div>
             </div>
-            <p className="text-sm text-gray-600"><span className="text-gray-800 font-semibold">1</span>/3 logged today</p>
+            <p className="text-sm text-gray-600"><span className="text-teal-600 font-semibold">{tasks.trackSpending.progress}</span>/{tasks.trackSpending.total} logged today</p>
           </div>
         </button>
 
-        {/* Check In Card - Fully clickable with hover */}
-        <button
-          onClick={() => {}}
-          data-testid="desktop-check-in-card"
-          className="group bg-white rounded-2xl border border-gray-200 p-5 hover:shadow-md hover:border-amber-200 hover:bg-amber-50/30 transition-all h-[150px] flex flex-col text-left cursor-pointer"
-        >
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-amber-400 to-orange-400 shadow-sm flex-shrink-0">
-                <Smile size={18} className="text-white" />
-              </div>
-              <span className="font-semibold text-gray-800 text-sm">Check in</span>
-            </div>
-            <ChevronRight size={18} className="text-gray-300 group-hover:text-amber-500 group-hover:translate-x-0.5 transition-all" />
-          </div>
-          <div className="flex-1 flex flex-col justify-end">
-            <p className="text-sm text-gray-600">How are you feeling?</p>
-            <p className="text-xs text-gray-400 mt-1">Tap to log your mood</p>
-          </div>
-        </button>
-
-        {/* Weekly Commitment Card - Fully clickable with hover */}
+        {/* 3. Weekly Commitment Card - Third */}
         <button
           onClick={() => setActiveScreen('commitment-flow')}
           data-testid="desktop-set-commitment-btn"
