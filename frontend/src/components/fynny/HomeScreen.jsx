@@ -316,14 +316,16 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
 
   return (
     <>
-      <div className="mb-6" data-testid="learn-fynny-section">
+      <div className="mb-4 lg:mb-6" data-testid="learn-fynny-section">
         {/* Course Card - Clickable to expand lessons */}
+        {/* Mobile: compact card, Desktop: taller primary focal card (260-300px) */}
         <button
           onClick={() => setIsModalOpen(true)}
           data-testid="course-card"
-          className="w-full bg-white rounded-2xl border border-gray-200 p-4 hover:shadow-lg transition-all text-left"
+          className="w-full bg-white rounded-2xl border border-gray-200 p-4 lg:p-6 hover:shadow-lg transition-all text-left lg:min-h-[280px]"
         >
-          <div className="flex items-start gap-3 sm:gap-4">
+          {/* Mobile Layout */}
+          <div className="flex items-start gap-3 sm:gap-4 lg:hidden">
             {/* Medal/Ribbon Icon */}
             <div className="w-14 h-14 sm:w-16 sm:h-16 bg-pink-100 rounded-2xl flex items-center justify-center flex-shrink-0">
               <Award size={32} className="text-pink-400 sm:hidden" strokeWidth={1.5} />
@@ -346,6 +348,56 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
                 </span>
                 <DiamondProgress total={lessons.length} completed={completedCount} />
               </div>
+            </div>
+          </div>
+
+          {/* Desktop Layout - Taller, more prominent */}
+          <div className="hidden lg:flex lg:flex-col lg:h-full">
+            {/* Top section with icon and title */}
+            <div className="flex items-start gap-5 mb-6">
+              {/* Medal/Ribbon Icon - Larger on desktop */}
+              <div className="w-20 h-20 bg-pink-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                <Award size={44} className="text-pink-400" strokeWidth={1.5} />
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 min-w-0 pt-1">
+                <h3 className="font-bold text-gray-800 text-xl">
+                  {allCompleted ? 'Course complete!' : 'Finish today\'s topic'}
+                </h3>
+                <p className="text-gray-500 text-base mt-1">
+                  Course: <span className="text-gray-700 font-medium">How Money Feels</span>
+                </p>
+              </div>
+            </div>
+
+            {/* Current lesson highlight */}
+            <div className="flex-1 bg-gradient-to-br from-pink-50 to-rose-50 rounded-xl p-5 mb-5">
+              <p className="text-xs text-pink-500 font-semibold uppercase tracking-wide mb-2">
+                {allCompleted ? 'ALL LESSONS COMPLETED' : 'UP NEXT'}
+              </p>
+              <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                {allCompleted ? 'Great job finishing this course!' : currentLesson?.title || 'All done!'}
+              </h4>
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-gray-500">{currentLesson?.duration || '2 min'}</span>
+                <div className="flex items-center gap-2">
+                  <BookOpen size={16} className="text-teal-500" />
+                  <span className="text-sm text-teal-600 font-medium">Read</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Volume2 size={16} className="text-teal-500" />
+                  <span className="text-sm text-teal-600 font-medium">Listen</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom progress row */}
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-500">
+                {remainingCount > 0 ? `${remainingCount} lesson${remainingCount > 1 ? 's' : ''} left` : 'All completed!'}
+              </span>
+              <DiamondProgress total={lessons.length} completed={completedCount} />
             </div>
           </div>
         </button>
