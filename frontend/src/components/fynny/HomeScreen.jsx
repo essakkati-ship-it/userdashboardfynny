@@ -566,8 +566,9 @@ const HomeScreen = ({ setActiveScreen }) => {
   ];
 
   return (
-    <div className="flex gap-6" data-testid="home-screen">
-      <div className="flex-1 min-w-0 max-w-xl">
+    <div className="lg:flex lg:gap-6" data-testid="home-screen">
+      {/* Main Center Column - wider on desktop (55-60%) */}
+      <div className="flex-1 min-w-0 lg:max-w-none">
         {/* Week Tracker Card - AT THE TOP */}
         <div className="bg-white rounded-2xl border border-gray-200 p-5 mb-4 shadow-sm" data-testid="week-tracker">
           {/* Week Day Badges */}
@@ -575,10 +576,10 @@ const HomeScreen = ({ setActiveScreen }) => {
             <button className="text-gray-300 hover:text-gray-400" data-testid="prev-week-btn">
               <ChevronLeft size={20} />
             </button>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 lg:gap-5">
               {weekDays.map((item, i) => (
                 <div key={i} className="flex flex-col items-center gap-1.5">
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
+                  <div className={`w-9 h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all ${
                     item.status === 'complete'
                       ? item.type === 'fynny'
                         ? 'bg-gradient-to-br from-amber-400 to-orange-400 shadow-md'
@@ -591,8 +592,8 @@ const HomeScreen = ({ setActiveScreen }) => {
                   }`}>
                     {item.status === 'complete' && (
                       item.type === 'fynny'
-                        ? <Award size={16} className="text-white" />
-                        : <Check size={16} className="text-white" strokeWidth={3} />
+                        ? <Award size={16} className="text-white lg:w-5 lg:h-5" />
+                        : <Check size={16} className="text-white lg:w-5 lg:h-5" strokeWidth={3} />
                     )}
                     {item.status === 'partial' && <Award size={14} className="text-amber-500" />}
                   </div>
@@ -636,26 +637,25 @@ const HomeScreen = ({ setActiveScreen }) => {
           </div>
         </div>
 
-        {/* PROMINENT: Learn with Fynny - Below Week Tracker, Above Today's Tasks */}
+        {/* PROMINENT: Main Lesson - Below Week Tracker, Above Today's Tasks */}
         <LearnWithFynnySection setActiveScreen={setActiveScreen} />
 
-        {/* Today's Plan Header */}
-        <h2 className="font-semibold text-gray-800 text-lg mb-3">Today's Tasks</h2>
+        {/* Today's Tasks Header */}
+        <h2 className="font-semibold text-gray-800 text-lg mb-3 lg:text-base">Today's Tasks</h2>
 
-        {/* Today's Plan Cards */}
+        {/* Today's Tasks Cards - compact on desktop */}
         <TodaysPlanSection setActiveScreen={setActiveScreen} />
 
-        {/* Microlearning Section */}
-        <div className="mt-6">
-          <MicrolearningSection setActiveScreen={setActiveScreen} />
+        {/* Mobile only: Microlearning Section (horizontal scroll) */}
+        <div className="mt-6 lg:hidden">
+          <MobileMicrolearningSection setActiveScreen={setActiveScreen} />
         </div>
       </div>
 
-      {/* Desktop Sidebar - Weekly Focus */}
-      <div className="hidden lg:block w-56 flex-shrink-0">
-        <div className="bg-white rounded-2xl p-5 border border-gray-200 sticky top-4 shadow-sm">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4">This Week's Focus</p>
-          <WeeklyStepsContent />
+      {/* Desktop Right Column - New for you today (22-25% width) */}
+      <div className="hidden lg:block lg:w-64 xl:w-72 flex-shrink-0">
+        <div className="sticky top-4">
+          <DesktopMicrolearningColumn setActiveScreen={setActiveScreen} />
         </div>
       </div>
     </div>
