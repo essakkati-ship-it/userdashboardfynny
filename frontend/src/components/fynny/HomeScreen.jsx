@@ -592,95 +592,96 @@ const HomeScreen = ({ setActiveScreen }) => {
   ];
 
   return (
-    <div className="lg:flex lg:gap-6" data-testid="home-screen">
-      {/* Main Center Column - wider on desktop (55-60%) */}
-      <div className="flex-1 min-w-0 lg:max-w-none">
-        {/* Week Tracker Card - AT THE TOP */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-5 mb-4 shadow-sm" data-testid="week-tracker">
-          {/* Week Day Badges */}
-          <div className="flex items-center justify-between mb-5 px-2">
-            <button className="text-gray-300 hover:text-gray-400" data-testid="prev-week-btn">
-              <ChevronLeft size={20} />
-            </button>
-            <div className="flex items-center gap-3 lg:gap-5">
-              {weekDays.map((item, i) => (
-                <div key={i} className="flex flex-col items-center gap-1.5">
-                  <div className={`w-9 h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all ${
-                    item.status === 'complete'
-                      ? item.type === 'fynny'
-                        ? 'bg-gradient-to-br from-amber-400 to-orange-400 shadow-md'
-                        : 'bg-gradient-to-br from-teal-400 to-teal-500 shadow-md'
-                      : item.status === 'partial'
-                        ? 'bg-gradient-to-br from-amber-200 to-orange-200'
-                        : item.status === 'current'
-                          ? 'bg-green-100 border-2 border-green-400'
-                          : 'bg-gray-100'
-                  }`}>
-                    {item.status === 'complete' && (
-                      item.type === 'fynny'
-                        ? <Award size={16} className="text-white lg:w-5 lg:h-5" />
-                        : <Check size={16} className="text-white lg:w-5 lg:h-5" strokeWidth={3} />
-                    )}
-                    {item.status === 'partial' && <Award size={14} className="text-amber-500" />}
-                  </div>
-                  <span className={`text-xs font-medium ${item.status === 'current' ? 'text-green-600' : 'text-gray-400'}`}>
-                    {item.day}
-                  </span>
+    <div data-testid="home-screen">
+      {/* Week Tracker Card - Full width, AT THE TOP (outside the 2-column area) */}
+      <div className="bg-white rounded-2xl border border-gray-200 p-5 mb-4 shadow-sm" data-testid="week-tracker">
+        {/* Week Day Badges */}
+        <div className="flex items-center justify-between mb-5 px-2">
+          <button className="text-gray-300 hover:text-gray-400" data-testid="prev-week-btn">
+            <ChevronLeft size={20} />
+          </button>
+          <div className="flex items-center gap-3 lg:gap-5">
+            {weekDays.map((item, i) => (
+              <div key={i} className="flex flex-col items-center gap-1.5">
+                <div className={`w-9 h-9 lg:w-10 lg:h-10 rounded-full flex items-center justify-center transition-all ${
+                  item.status === 'complete'
+                    ? item.type === 'fynny'
+                      ? 'bg-gradient-to-br from-amber-400 to-orange-400 shadow-md'
+                      : 'bg-gradient-to-br from-teal-400 to-teal-500 shadow-md'
+                    : item.status === 'partial'
+                      ? 'bg-gradient-to-br from-amber-200 to-orange-200'
+                      : item.status === 'current'
+                        ? 'bg-green-100 border-2 border-green-400'
+                        : 'bg-gray-100'
+                }`}>
+                  {item.status === 'complete' && (
+                    item.type === 'fynny'
+                      ? <Award size={16} className="text-white lg:w-5 lg:h-5" />
+                      : <Check size={16} className="text-white lg:w-5 lg:h-5" strokeWidth={3} />
+                  )}
+                  {item.status === 'partial' && <Award size={14} className="text-amber-500" />}
                 </div>
-              ))}
-            </div>
-            <button className="text-gray-300 hover:text-gray-400" data-testid="next-week-btn">
-              <ChevronRight size={20} />
-            </button>
-          </div>
-
-          {/* Progress Summary */}
-          <div className="flex items-center gap-6 pt-3 border-t border-gray-100">
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-sm font-medium text-pink-500">Fynnies</span>
-                <span className="text-sm text-gray-500">Financial Calm Zone</span>
+                <span className={`text-xs font-medium ${item.status === 'current' ? 'text-green-600' : 'text-gray-400'}`}>
+                  {item.day}
+                </span>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="flex-1">
-                  <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full w-2/5 bg-gradient-to-r from-green-400 to-teal-400 rounded-full"></div>
-                  </div>
+            ))}
+          </div>
+          <button className="text-gray-300 hover:text-gray-400" data-testid="next-week-btn">
+            <ChevronRight size={20} />
+          </button>
+        </div>
+
+        {/* Progress Summary */}
+        <div className="flex items-center gap-6 pt-3 border-t border-gray-100">
+          <div className="flex-1">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-sm font-medium text-pink-500">Fynnies</span>
+              <span className="text-sm text-gray-500">Financial Calm Zone</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex-1">
+                <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-full w-2/5 bg-gradient-to-r from-green-400 to-teal-400 rounded-full"></div>
                 </div>
               </div>
-              <div className="flex items-center justify-between mt-1.5">
-                <span className="text-sm font-semibold text-gray-800">12 <span className="font-normal text-gray-400">earned</span></span>
-                <span className="text-sm text-gray-400">15 - 20 weekly</span>
-              </div>
             </div>
-          </div>
-
-          {/* Pagination dots */}
-          <div className="flex justify-center gap-1.5 mt-4">
-            <div className="w-2 h-2 rounded-full bg-gray-800"></div>
-            <div className="w-2 h-2 rounded-full bg-gray-300"></div>
-            <div className="w-2 h-2 rounded-full bg-gray-300"></div>
+            <div className="flex items-center justify-between mt-1.5">
+              <span className="text-sm font-semibold text-gray-800">12 <span className="font-normal text-gray-400">earned</span></span>
+              <span className="text-sm text-gray-400">15 - 20 weekly</span>
+            </div>
           </div>
         </div>
 
-        {/* PROMINENT: Main Lesson - Below Week Tracker, Above Today's Tasks */}
-        <LearnWithFynnySection setActiveScreen={setActiveScreen} />
-
-        {/* Today's Tasks Header */}
-        <h2 className="font-semibold text-gray-800 text-lg mb-3 lg:text-base">Today's Tasks</h2>
-
-        {/* Today's Tasks Cards - compact on desktop */}
-        <TodaysPlanSection setActiveScreen={setActiveScreen} />
-
-        {/* Mobile only: Microlearning Section (horizontal scroll) */}
-        <div className="mt-6 lg:hidden">
-          <MobileMicrolearningSection setActiveScreen={setActiveScreen} />
+        {/* Pagination dots */}
+        <div className="flex justify-center gap-1.5 mt-4">
+          <div className="w-2 h-2 rounded-full bg-gray-800"></div>
+          <div className="w-2 h-2 rounded-full bg-gray-300"></div>
+          <div className="w-2 h-2 rounded-full bg-gray-300"></div>
         </div>
       </div>
 
-      {/* Desktop Right Column - New for you today (22-25% width) */}
-      <div className="hidden lg:block lg:w-64 xl:w-72 flex-shrink-0">
-        <div className="sticky top-4">
+      {/* 2-Column Layout: Main Content + Right Column (aligned at top with Lesson) */}
+      <div className="lg:flex lg:gap-6">
+        {/* Main Center Column */}
+        <div className="flex-1 min-w-0">
+          {/* PROMINENT: Main Lesson - Primary focal point */}
+          <LearnWithFynnySection setActiveScreen={setActiveScreen} />
+
+          {/* Today's Tasks Header */}
+          <h2 className="font-semibold text-gray-800 text-lg mb-3 lg:text-base">Today's Tasks</h2>
+
+          {/* Today's Tasks Cards - compact on desktop */}
+          <TodaysPlanSection setActiveScreen={setActiveScreen} />
+
+          {/* Mobile only: Microlearning Section (horizontal scroll) */}
+          <div className="mt-6 lg:hidden">
+            <MobileMicrolearningSection setActiveScreen={setActiveScreen} />
+          </div>
+        </div>
+
+        {/* Desktop Right Column - New for you today (aligned with Lesson card) */}
+        <div className="hidden lg:block lg:w-64 xl:w-72 flex-shrink-0">
           <DesktopMicrolearningColumn setActiveScreen={setActiveScreen} />
         </div>
       </div>
