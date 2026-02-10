@@ -397,8 +397,8 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
                 <h3 className="font-bold text-gray-800 text-xl">
                   {allCompleted ? 'Course complete!' : 'Finish today\'s topic'}
                 </h3>
-                <p className="text-gray-500 text-base mt-1">
-                  Course: <span className="text-gray-700 font-medium">How Money Feels</span>
+                <p className="text-gray-600 text-base mt-1">
+                  How Money Feels
                 </p>
               </div>
             </div>
@@ -408,7 +408,7 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
               <p className="text-xs text-pink-500 font-semibold uppercase tracking-wide mb-2">
                 {allCompleted ? 'ALL LESSONS COMPLETED' : 'UP NEXT'}
               </p>
-              <h4 className="text-lg font-semibold text-gray-800 mb-2">
+              <h4 className="text-lg font-normal text-gray-800 mb-2">
                 {allCompleted ? 'Great job finishing this course!' : currentLesson?.title || 'All done!'}
               </h4>
               <div className="flex items-center gap-4">
