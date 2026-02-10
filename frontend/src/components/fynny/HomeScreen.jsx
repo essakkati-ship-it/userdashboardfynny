@@ -299,17 +299,17 @@ const CourseLessonModal = ({ isOpen, onClose, setActiveScreen, lessons, onAllCom
   );
 };
 
-// Diamond Progress Indicator Component
+// Diamond Progress Indicator Component - Thinner, less dominant
 const DiamondProgress = ({ total, completed }) => {
   return (
     <div className="flex items-center gap-1">
       {Array.from({ length: total }).map((_, index) => (
         <div
           key={index}
-          className={`w-3 h-3 rotate-45 ${
+          className={`w-2.5 h-2.5 rotate-45 ${
             index < completed 
-              ? 'bg-gray-500' 
-              : 'border-2 border-gray-400 bg-transparent'
+              ? 'bg-gray-400' 
+              : 'border border-gray-300 bg-transparent'
           }`}
         />
       ))}
