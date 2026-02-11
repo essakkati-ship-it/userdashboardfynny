@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import {
   ChevronRight, Check, Award, ChevronLeft, Target,
   Receipt, Bell, Volume2, X, Play,
-  Sun, Leaf, Zap, Smile, BookOpen
+  Sun, Leaf, Zap, Smile, BookOpen, Loader2
 } from 'lucide-react';
 import { GoalAchievedModal } from './CelebrationScreens';
+import { useUser } from '../../context/UserContext';
 
 // Desktop Right Column - New for you today (vertical stacking, aligned with lesson card)
 const DesktopMicrolearningColumn = ({ setActiveScreen }) => (
