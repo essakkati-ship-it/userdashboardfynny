@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { userApi, progressApi, moodApi, spendingApi } from '../services/api';
+import { userApi, progressApi, moodApi, spendingApi, modulesApi, lessonsApi } from '../services/api';
+import { SAMPLE_MODULES } from '../data/lessonContent';
 
 const UserContext = createContext(null);
 
@@ -9,6 +10,7 @@ const DEFAULT_USERNAME = 'demo_user';
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
   const [progress, setProgress] = useState(null);
+  const [modules, setModules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -29,6 +31,21 @@ export function UserProvider({ children }) {
       // Fetch user progress
       const progressData = await progressApi.getUserProgress(userData.id);
       setProgress(progressData);
+      
+      // Fetch modules - try seeding first if empty
+      try {
+        await modulesApi.seedSampleData();
+      } catch (e) {
+        // Ignore if already seeded
+      }
+      
+      const modulesData = await modulesApi.getAll();
+      if (modulesData.modules && modulesData.modules.length > 0) {
+        setModules(modulesData.modules);
+      } else {
+        // Fallback to local sample data
+        setModules(SAMPLE_MODULES);
+      }
     } catch (err) {
       console.error('Failed to initialize user:', err);
       setError(err.message);
@@ -57,6 +74,8 @@ export function UserProvider({ children }) {
           set_commitment: { completed: false },
         },
       });
+      // Fallback to local sample data
+      setModules(SAMPLE_MODULES);
     } finally {
       setLoading(false);
     }
@@ -74,12 +93,43 @@ export function UserProvider({ children }) {
     }
   }, [user?.id]);
 
+  // Refresh modules
+  const refreshModules = useCallback(async () => {
+    try {
+      const modulesData = await modulesApi.getAll();
+      if (modulesData.modules && modulesData.modules.length > 0) {
+        setModules(modulesData.modules);
+      }
+    } catch (err) {
+      console.error('Failed to refresh modules:', err);
+    }
+  }, []);
+
+  // Get module by ID
+  const getModuleById = useCallback((moduleId) => {
+    return modules.find(m => m.id === moduleId);
+  }, [modules]);
+
+  // Get lesson by ID
+  const getLessonById = useCallback((moduleId, lessonId) => {
+    const module = modules.find(m => m.id === moduleId);
+    if (!module) return null;
+    return module.lessons?.find(l => l.id === lessonId);
+  }, [modules]);
+
+  // Get all lessons for a module
+  const getModuleLessons = useCallback((moduleId) => {
+    const module = modules.find(m => m.id === moduleId);
+    if (!module) return [];
+    return (module.lessons || []).sort((a, b) => a.order - b.order);
+  }, [modules]);
+
   // Update lesson progress
-  const updateLessonProgress = useCallback(async (lessonId, courseId, status) => {
+  const updateLessonProgress = useCallback(async (lessonOrder, moduleId, status) => {
     if (!user?.id) return;
     
     try {
-      await progressApi.updateLessonProgress(user.id, lessonId, courseId, status);
+      await progressApi.updateLessonProgress(user.id, lessonOrder, moduleId, status);
       await refreshProgress();
     } catch (err) {
       console.error('Failed to update lesson progress:', err);
@@ -144,9 +194,14 @@ export function UserProvider({ children }) {
   const value = {
     user,
     progress,
+    modules,
     loading,
     error,
     refreshProgress,
+    refreshModules,
+    getModuleById,
+    getLessonById,
+    getModuleLessons,
     updateLessonProgress,
     completeCourse,
     logMoodCheckIn,
