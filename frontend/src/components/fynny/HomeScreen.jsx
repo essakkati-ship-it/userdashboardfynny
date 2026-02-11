@@ -776,7 +776,7 @@ const HomeScreen = ({ setActiveScreen }) => {
           <h2 className="font-semibold text-gray-800 text-lg mb-3 lg:text-base">Today's Tasks</h2>
 
           {/* Today's Tasks Cards - compact on desktop */}
-          <TodaysPlanSection setActiveScreen={setActiveScreen} />
+          <TodaysPlanSection setActiveScreen={setActiveScreen} tasks={tasks} />
 
           {/* Mobile only: Microlearning Section (horizontal scroll) */}
           <div className="mt-6 lg:hidden">
