@@ -162,10 +162,144 @@ export const healthApi = {
   },
 };
 
+// ==================== MODULES API ====================
+
+export const modulesApi = {
+  /**
+   * Get all modules with lessons
+   */
+  getAll: async () => {
+    return apiCall('/modules');
+  },
+
+  /**
+   * Get a single module with lessons
+   */
+  getById: async (moduleId) => {
+    return apiCall(`/modules/${moduleId}`);
+  },
+
+  /**
+   * Create a new module
+   */
+  create: async (data) => {
+    return apiCall('/modules', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  /**
+   * Update a module
+   */
+  update: async (moduleId, data) => {
+    return apiCall(`/modules/${moduleId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  /**
+   * Delete a module
+   */
+  delete: async (moduleId) => {
+    return apiCall(`/modules/${moduleId}`, {
+      method: 'DELETE',
+    });
+  },
+
+  /**
+   * Seed sample modules
+   */
+  seedSampleData: async () => {
+    return apiCall('/seed/modules', {
+      method: 'POST',
+    });
+  },
+};
+
+// ==================== LESSONS API ====================
+
+export const lessonsApi = {
+  /**
+   * Get a single lesson
+   */
+  getById: async (lessonId) => {
+    return apiCall(`/lessons/${lessonId}`);
+  },
+
+  /**
+   * Get all lessons for a module
+   */
+  getByModule: async (moduleId) => {
+    return apiCall(`/modules/${moduleId}/lessons`);
+  },
+
+  /**
+   * Create a new lesson
+   */
+  create: async (data) => {
+    return apiCall('/lessons', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  /**
+   * Update a lesson
+   */
+  update: async (lessonId, data) => {
+    return apiCall(`/lessons/${lessonId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  /**
+   * Delete a lesson
+   */
+  delete: async (lessonId) => {
+    return apiCall(`/lessons/${lessonId}`, {
+      method: 'DELETE',
+    });
+  },
+
+  /**
+   * Add a card to a lesson
+   */
+  addCard: async (lessonId, cardData) => {
+    return apiCall(`/lessons/${lessonId}/cards`, {
+      method: 'POST',
+      body: JSON.stringify(cardData),
+    });
+  },
+
+  /**
+   * Update a card in a lesson
+   */
+  updateCard: async (lessonId, cardId, cardData) => {
+    return apiCall(`/lessons/${lessonId}/cards/${cardId}`, {
+      method: 'PUT',
+      body: JSON.stringify(cardData),
+    });
+  },
+
+  /**
+   * Delete a card from a lesson
+   */
+  deleteCard: async (lessonId, cardId) => {
+    return apiCall(`/lessons/${lessonId}/cards/${cardId}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
 export default {
   user: userApi,
   progress: progressApi,
   mood: moodApi,
   spending: spendingApi,
   health: healthApi,
+  modules: modulesApi,
+  lessons: lessonsApi,
 };
