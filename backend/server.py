@@ -602,6 +602,344 @@ async def complete_course(user_id: str, course_id: str):
     return {"success": True, "message": "Course completed! Bonus fynnies awarded."}
 
 
+# ==================== MODULE ROUTES ====================
+
+@api_router.post("/modules", response_model=Module)
+async def create_module(input: ModuleCreate):
+    """Create a new learning module"""
+    module = Module(**input.model_dump())
+    doc = module.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.modules.insert_one(doc)
+    return module
+
+@api_router.get("/modules")
+async def get_all_modules():
+    """Get all modules with their lessons"""
+    modules = await db.modules.find({}, {"_id": 0}).sort("order", 1).to_list(100)
+    
+    result = []
+    for module in modules:
+        # Get lessons for this module
+        lessons = await db.lessons.find(
+            {"module_id": module["id"]},
+            {"_id": 0}
+        ).sort("order", 1).to_list(100)
+        
+        module["lessons"] = lessons
+        result.append(module)
+    
+    return {"modules": result}
+
+@api_router.get("/modules/{module_id}")
+async def get_module(module_id: str):
+    """Get a single module with its lessons"""
+    module = await db.modules.find_one({"id": module_id}, {"_id": 0})
+    if not module:
+        raise HTTPException(status_code=404, detail="Module not found")
+    
+    # Get lessons for this module
+    lessons = await db.lessons.find(
+        {"module_id": module_id},
+        {"_id": 0}
+    ).sort("order", 1).to_list(100)
+    
+    module["lessons"] = lessons
+    return module
+
+@api_router.put("/modules/{module_id}")
+async def update_module(module_id: str, input: ModuleCreate):
+    """Update a module"""
+    result = await db.modules.update_one(
+        {"id": module_id},
+        {"$set": input.model_dump()}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Module not found")
+    return {"success": True, "message": "Module updated"}
+
+@api_router.delete("/modules/{module_id}")
+async def delete_module(module_id: str):
+    """Delete a module and its lessons"""
+    # Delete all lessons in this module
+    await db.lessons.delete_many({"module_id": module_id})
+    # Delete the module
+    result = await db.modules.delete_one({"id": module_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Module not found")
+    return {"success": True, "message": "Module and lessons deleted"}
+
+
+# ==================== LESSON ROUTES ====================
+
+@api_router.post("/lessons", response_model=Lesson)
+async def create_lesson(input: LessonCreate):
+    """Create a new lesson"""
+    lesson = Lesson(**input.model_dump())
+    doc = lesson.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.lessons.insert_one(doc)
+    return lesson
+
+@api_router.get("/lessons/{lesson_id}")
+async def get_lesson(lesson_id: str):
+    """Get a single lesson with its cards"""
+    lesson = await db.lessons.find_one({"id": lesson_id}, {"_id": 0})
+    if not lesson:
+        raise HTTPException(status_code=404, detail="Lesson not found")
+    return lesson
+
+@api_router.get("/modules/{module_id}/lessons")
+async def get_module_lessons(module_id: str):
+    """Get all lessons for a module"""
+    lessons = await db.lessons.find(
+        {"module_id": module_id},
+        {"_id": 0}
+    ).sort("order", 1).to_list(100)
+    return {"lessons": lessons}
+
+@api_router.put("/lessons/{lesson_id}")
+async def update_lesson(lesson_id: str, input: LessonCreate):
+    """Update a lesson"""
+    result = await db.lessons.update_one(
+        {"id": lesson_id},
+        {"$set": input.model_dump()}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Lesson not found")
+    return {"success": True, "message": "Lesson updated"}
+
+@api_router.delete("/lessons/{lesson_id}")
+async def delete_lesson(lesson_id: str):
+    """Delete a lesson"""
+    result = await db.lessons.delete_one({"id": lesson_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Lesson not found")
+    return {"success": True, "message": "Lesson deleted"}
+
+@api_router.post("/lessons/{lesson_id}/cards")
+async def add_card_to_lesson(lesson_id: str, input: LessonCardCreate):
+    """Add a card to a lesson"""
+    card = LessonCard(**input.model_dump())
+    
+    result = await db.lessons.update_one(
+        {"id": lesson_id},
+        {"$push": {"cards": card.model_dump()}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Lesson not found")
+    return {"success": True, "card_id": card.id}
+
+@api_router.put("/lessons/{lesson_id}/cards/{card_id}")
+async def update_card(lesson_id: str, card_id: str, input: LessonCardCreate):
+    """Update a card in a lesson"""
+    result = await db.lessons.update_one(
+        {"id": lesson_id, "cards.id": card_id},
+        {"$set": {
+            "cards.$.type": input.type,
+            "cards.$.title": input.title,
+            "cards.$.cta": input.cta,
+            "cards.$.content": input.content,
+            "cards.$.order": input.order
+        }}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Lesson or card not found")
+    return {"success": True, "message": "Card updated"}
+
+@api_router.delete("/lessons/{lesson_id}/cards/{card_id}")
+async def delete_card(lesson_id: str, card_id: str):
+    """Delete a card from a lesson"""
+    result = await db.lessons.update_one(
+        {"id": lesson_id},
+        {"$pull": {"cards": {"id": card_id}}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Lesson not found")
+    return {"success": True, "message": "Card deleted"}
+
+
+# ==================== SEED DATA ROUTE ====================
+
+@api_router.post("/seed/modules")
+async def seed_sample_modules():
+    """Seed the database with sample module data"""
+    # Check if modules already exist
+    existing = await db.modules.count_documents({})
+    if existing > 0:
+        return {"message": "Modules already seeded", "count": existing}
+    
+    # Sample module data
+    sample_module = {
+        "id": "how-money-feels",
+        "title": "How Money Feels",
+        "description": "Understand your emotional relationship with money",
+        "icon": "Heart",
+        "theme_color": "rose",
+        "order": 1,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.modules.insert_one(sample_module)
+    
+    # Sample lessons
+    sample_lessons = [
+        {
+            "id": "prepare-finances",
+            "module_id": "how-money-feels",
+            "title": "Prepare your finances",
+            "description": "Getting started with Fynny",
+            "duration": "2 min",
+            "order": 1,
+            "theme_color": "rose",
+            "cards": [
+                {
+                    "id": "card-1-1",
+                    "type": "text",
+                    "title": "Getting Started",
+                    "cta": "Continue",
+                    "order": 0,
+                    "content": {
+                        "icon": "Heart",
+                        "blocks": [
+                            {"type": "bold", "text": "There are three simple things you need to do each day to be successful with Fynny—that's it!"},
+                            {"type": "list", "style": "numbered", "items": ["Learn", "Check in", "Track your spending"]},
+                            {"type": "text", "text": "You've already started learning by simply reading this lesson.", "highlight": "Before getting started with your next action (checking in), let's take a quick look at the key role each action plays in helping you find financial calm."}
+                        ]
+                    }
+                },
+                {
+                    "id": "card-1-2",
+                    "type": "text",
+                    "title": "Learn",
+                    "cta": "Continue",
+                    "order": 1,
+                    "content": {
+                        "sectionNumber": 1,
+                        "sectionTitle": "LEARN",
+                        "icon": "BookOpen",
+                        "blocks": [
+                            {"type": "text", "highlight": "Your Fynny course has been personalized to your needs and goals.", "text": "It's broken down into mini-courses on topics like understanding your money emotions, building healthy habits, and more."},
+                            {"type": "callout", "style": "info", "text": "Every day, you'll learn about yourself and build healthy money habits through fun, bite-size lessons."}
+                        ]
+                    }
+                },
+                {
+                    "id": "card-1-3",
+                    "type": "completion",
+                    "title": "Complete",
+                    "cta": "Complete Lesson",
+                    "order": 2,
+                    "content": {
+                        "heading": "Lesson Complete!",
+                        "message": "You've taken the first step in your financial wellness journey.",
+                        "highlight": "This awareness will be your superpower.",
+                        "reward": {"fynnies": 1, "label": "Lesson 1 complete"}
+                    }
+                }
+            ],
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": "discover-money-style",
+            "module_id": "how-money-feels",
+            "title": "Discover your money style",
+            "description": "Understanding your money personality",
+            "duration": "2 min",
+            "order": 2,
+            "theme_color": "purple",
+            "cards": [
+                {
+                    "id": "card-2-1",
+                    "type": "text",
+                    "title": "Money Styles",
+                    "cta": "Continue",
+                    "order": 0,
+                    "content": {
+                        "icon": "Brain",
+                        "blocks": [
+                            {"type": "heading", "text": "Discover Your Money Style"},
+                            {"type": "text", "text": "Everyone has a unique relationship with money.", "highlight": "Understanding your 'money style' is the first step to making lasting changes."}
+                        ]
+                    }
+                },
+                {
+                    "id": "card-2-2",
+                    "type": "list",
+                    "title": "Four Styles",
+                    "cta": "Continue",
+                    "order": 1,
+                    "content": {
+                        "heading": "The Four Money Styles",
+                        "subheading": "Which one sounds like you?",
+                        "items": [
+                            {"title": "The Emotional Spender", "description": "Uses spending to cope with feelings.", "icon": "Heart", "color": "amber"},
+                            {"title": "The Saver", "description": "Finds security in saving.", "icon": "TrendingUp", "color": "green"},
+                            {"title": "The Avoider", "description": "Prefers not to think about money.", "icon": "Lightbulb", "color": "blue"},
+                            {"title": "The Status Seeker", "description": "Ties self-worth to wealth appearance.", "icon": "Award", "color": "pink"}
+                        ]
+                    }
+                },
+                {
+                    "id": "card-2-3",
+                    "type": "completion",
+                    "title": "Complete",
+                    "cta": "Complete Lesson",
+                    "order": 2,
+                    "content": {
+                        "heading": "Lesson Complete!",
+                        "message": "You've learned about the four money styles.",
+                        "reward": {"fynnies": 1, "label": "Lesson 2 complete"}
+                    }
+                }
+            ],
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": "start-tracking",
+            "module_id": "how-money-feels",
+            "title": "Start tracking calmly",
+            "description": "Begin your tracking journey without stress",
+            "duration": "2 min",
+            "order": 3,
+            "theme_color": "teal",
+            "cards": [
+                {
+                    "id": "card-3-1",
+                    "type": "text",
+                    "title": "Calm Tracking",
+                    "cta": "Continue",
+                    "order": 0,
+                    "content": {
+                        "icon": "Target",
+                        "blocks": [
+                            {"type": "heading", "text": "Tracking Without Stress"},
+                            {"type": "text", "text": "Many people avoid tracking because it feels overwhelming.", "highlight": "We're going to change that."}
+                        ]
+                    }
+                },
+                {
+                    "id": "card-3-2",
+                    "type": "completion",
+                    "title": "Complete",
+                    "cta": "Complete Lesson",
+                    "order": 1,
+                    "content": {
+                        "heading": "Module Complete!",
+                        "message": "You've completed the How Money Feels module!",
+                        "reward": {"fynnies": 5, "label": "Module complete!"}
+                    }
+                }
+            ],
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+    ]
+    
+    for lesson in sample_lessons:
+        await db.lessons.insert_one(lesson)
+    
+    return {"message": "Sample modules seeded successfully", "modules": 1, "lessons": len(sample_lessons)}
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
