@@ -320,15 +320,24 @@ const DiamondProgress = ({ total, completed }) => {
 
 // Prominent Learn with Fynny Section - Course Card Style
 const LearnWithFynnySection = ({ setActiveScreen }) => {
+  const { progress, updateLessonProgress, completeCourse } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
 
-  // Lesson data - status can be: 'done', 'current', or 'locked'
-  const lessons = [
+  // Default lesson data - merged with backend progress
+  const defaultLessons = [
     { id: 1, title: 'Prepare your finances', duration: '2 min', status: 'done', screen: 'lesson' },
     { id: 2, title: 'Discover your money style', duration: '2 min', status: 'done', screen: 'lesson-two' },
     { id: 3, title: 'Start tracking calmly', duration: '2 min', status: 'current', screen: 'lesson' },
   ];
+
+  // Merge with backend progress if available
+  const lessons = defaultLessons.map(lesson => {
+    const backendLesson = progress?.lesson_progress?.find(
+      l => l.lesson_id === lesson.id && l.course_id === 'how-money-feels'
+    );
+    return backendLesson ? { ...lesson, status: backendLesson.status } : lesson;
+  });
 
   const completedCount = lessons.filter(l => l.status === 'done').length;
   const remainingCount = lessons.length - completedCount;
@@ -336,9 +345,15 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
   const allCompleted = completedCount === lessons.length;
 
   // Handle when user completes the final lesson
-  const handleLessonComplete = () => {
+  const handleLessonComplete = async () => {
     setIsModalOpen(false);
     setShowCelebration(true);
+    // Notify backend about course completion
+    try {
+      await completeCourse('how-money-feels');
+    } catch (err) {
+      console.error('Failed to complete course:', err);
+    }
   };
 
   // Handle continuing after celebration
