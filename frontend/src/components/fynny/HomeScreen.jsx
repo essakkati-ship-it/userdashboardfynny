@@ -643,15 +643,54 @@ const TodaysPlanSection = ({ setActiveScreen, tasks: propTasks }) => {
 };
 
 const HomeScreen = ({ setActiveScreen }) => {
-  const weekDays = [
-    { day: 'M', status: 'complete', type: 'fynny' },
-    { day: 'T', status: 'complete', type: 'streak' },
-    { day: 'W', status: 'complete', type: 'fynny' },
-    { day: 'T', status: 'partial', type: 'half' },
-    { day: 'F', status: 'current', type: 'today' },
-    { day: 'S', status: 'upcoming', type: 'none' },
-    { day: 'S', status: 'upcoming', type: 'none' },
-  ];
+  const { progress, loading, error } = useUser();
+
+  // Use data from context or fallback to defaults
+  const weekDays = progress?.week_data?.length > 0 
+    ? progress.week_data.map(d => ({
+        day: d.day,
+        status: d.status,
+        type: d.type || 'none'
+      }))
+    : [
+        { day: 'M', status: 'complete', type: 'fynny' },
+        { day: 'T', status: 'complete', type: 'streak' },
+        { day: 'W', status: 'complete', type: 'fynny' },
+        { day: 'T', status: 'partial', type: 'half' },
+        { day: 'F', status: 'current', type: 'today' },
+        { day: 'S', status: 'upcoming', type: 'none' },
+        { day: 'S', status: 'upcoming', type: 'none' },
+      ];
+
+  const fynnies = progress?.fynnies ?? 12;
+  
+  // Transform daily tasks from backend format
+  const tasks = {
+    checkIn: { 
+      completed: progress?.daily_tasks?.check_in?.completed ?? false, 
+      value: progress?.daily_tasks?.check_in?.value ?? null 
+    },
+    trackSpending: { 
+      completed: progress?.daily_tasks?.track_spending?.completed ?? false, 
+      progress: progress?.daily_tasks?.track_spending?.progress ?? 1, 
+      total: progress?.daily_tasks?.track_spending?.total ?? 3 
+    },
+    setCommitment: { 
+      completed: progress?.daily_tasks?.set_commitment?.completed ?? false 
+    },
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]" data-testid="home-loading">
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 size={32} className="animate-spin text-teal-500" />
+          <span className="text-gray-500 text-sm">Loading your progress...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div data-testid="home-screen">
