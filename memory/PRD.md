@@ -31,6 +31,57 @@ Fynny is a Noom-inspired financial wellbeing app that helps users build healthy 
 
 ### Date: February 11, 2026 (Latest)
 
+#### ✅ Dynamic Lesson System Refactoring
+Refactored lesson screens to render dynamically from admin-created modules (modules → lessons → cards):
+
+**Data Structure:**
+- **Modules**: Course containers (e.g., "How Money Feels")
+  - id, title, description, icon, theme_color, order
+- **Lessons**: Individual lessons within modules
+  - id, module_id, title, duration, order, theme_color, cards[]
+- **Cards**: Lesson content cards rendered in sequence
+  - id, type, title, cta, content, order
+  - Types: text, list, quiz, reflection, completion, illustration
+
+**Backend API Endpoints (NEW):**
+- `GET /api/modules` - Get all modules with lessons
+- `GET /api/modules/{id}` - Get single module with lessons
+- `POST /api/modules` - Create module (admin)
+- `PUT /api/modules/{id}` - Update module (admin)
+- `DELETE /api/modules/{id}` - Delete module (admin)
+- `GET /api/lessons/{id}` - Get single lesson
+- `POST /api/lessons` - Create lesson (admin)
+- `PUT /api/lessons/{id}` - Update lesson (admin)
+- `DELETE /api/lessons/{id}` - Delete lesson (admin)
+- `POST /api/lessons/{id}/cards` - Add card to lesson (admin)
+- `PUT /api/lessons/{id}/cards/{card_id}` - Update card (admin)
+- `DELETE /api/lessons/{id}/cards/{card_id}` - Delete card (admin)
+- `POST /api/seed/modules` - Seed sample data
+
+**New Files Created:**
+- `/app/frontend/src/data/lessonContent.js` - Data model and sample content structure
+- `/app/frontend/src/components/fynny/DynamicLessonViewer.jsx` - Dynamic card-based lesson renderer
+
+**Files Modified:**
+- `/app/backend/server.py` - Added Module/Lesson/Card models and CRUD endpoints
+- `/app/frontend/src/services/api.js` - Added modules and lessons API
+- `/app/frontend/src/context/UserContext.jsx` - Added modules state and helper methods
+- `/app/frontend/src/components/fynny/FynnyDashboard.jsx` - Added dynamic lesson navigation
+- `/app/frontend/src/components/fynny/HomeScreen.jsx` - Uses modules from context, navigates to dynamic lessons
+
+**Card Types Supported:**
+- `text` - Text content with blocks (bold, highlight, list, callout)
+- `list` - Styled list items with icons
+- `reflection` - Reflection prompts with numbered questions
+- `completion` - Lesson complete with fynny reward
+- `quiz` - Multiple choice questions (structure ready)
+- `illustration` - Image/icon illustrations
+
+**Theme Colors Available:**
+- rose, purple, amber, indigo, green, teal
+
+---
+
 #### ✅ Backend API & MongoDB Integration
 Connected the frontend to a FastAPI backend with MongoDB for persisting user progress:
 
