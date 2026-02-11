@@ -554,7 +554,7 @@ const LearnWithFynnySection = ({ setActiveScreen, navigateToLesson }) => {
               <span className="text-sm text-gray-500">
                 {remainingCount > 0 ? `${remainingCount} lesson${remainingCount > 1 ? 's' : ''} left` : 'All completed!'}
               </span>
-              <DiamondProgress total={lessons.length} completed={completedCount} />
+              <DiamondProgress total={displayLessons.length} completed={completedCount} />
             </div>
           </div>
         </button>
@@ -565,8 +565,9 @@ const LearnWithFynnySection = ({ setActiveScreen, navigateToLesson }) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         setActiveScreen={setActiveScreen}
-        lessons={lessons}
+        lessons={displayLessons}
         onAllComplete={handleLessonComplete}
+        onReadLesson={handleReadLesson}
       />
 
       {/* Goal Achieved Celebration Modal */}
@@ -574,8 +575,8 @@ const LearnWithFynnySection = ({ setActiveScreen, navigateToLesson }) => {
         isOpen={showCelebration}
         onClose={() => setShowCelebration(false)}
         onContinue={handleCelebrationContinue}
-        courseName="How Money Feels"
-        lessonsCompleted={lessons.length}
+        courseName={currentModule.title}
+        lessonsCompleted={displayLessons.length}
         fynniesEarned={1}
       />
     </>
