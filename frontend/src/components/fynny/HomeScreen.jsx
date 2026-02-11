@@ -132,12 +132,36 @@ const MobileMicrolearningSection = ({ setActiveScreen }) => (
 );
 
 // Course Lesson Modal - Slides up on mobile, centered on desktop
+// Allows accessing ANY lesson (completed or current)
 const CourseLessonModal = ({ isOpen, onClose, setActiveScreen, lessons, onAllComplete }) => {
+  const [selectedLessonId, setSelectedLessonId] = useState(null);
+  
   if (!isOpen) return null;
 
   const completedCount = lessons.filter(l => l.status === 'done').length;
   const allCompleted = completedCount === lessons.length;
-  const currentLesson = lessons.find(l => l.status === 'current') || lessons.find(l => l.status !== 'done');
+  
+  // Find the current lesson (first non-done lesson)
+  const currentLessonId = lessons.find(l => l.status === 'current')?.id || 
+                          lessons.find(l => l.status !== 'done')?.id;
+  
+  // Handle lesson click - toggle selection or select
+  const handleLessonClick = (lessonId, lessonStatus) => {
+    // Allow clicking on completed or current lessons (not locked)
+    if (lessonStatus === 'locked') return;
+    
+    if (selectedLessonId === lessonId) {
+      setSelectedLessonId(null); // Collapse if already selected
+    } else {
+      setSelectedLessonId(lessonId); // Expand this lesson
+    }
+  };
+
+  // Navigate to lesson
+  const handleReadLesson = (lesson) => {
+    onClose();
+    setActiveScreen(lesson.screen);
+  };
 
   return (
     <>
@@ -181,23 +205,38 @@ const CourseLessonModal = ({ isOpen, onClose, setActiveScreen, lessons, onAllCom
               <div className="absolute left-[18px] top-6 bottom-6 w-0.5 bg-gray-200"></div>
               
               {lessons.map((lesson, index) => {
-                const isCurrentLesson = lesson.status === 'current' || (!allCompleted && lesson.status !== 'done' && !lessons.slice(0, index).some(l => l.status !== 'done'));
-                const showActions = isCurrentLesson && !allCompleted;
+                const isCurrentLesson = lesson.id === currentLessonId;
+                const isSelected = selectedLessonId === lesson.id;
+                const isAccessible = lesson.status === 'done' || lesson.status === 'current';
+                
+                // Auto-expand current lesson if nothing is selected
+                const showExpanded = isSelected || (selectedLessonId === null && isCurrentLesson && !allCompleted);
 
                 return (
                   <div 
                     key={lesson.id}
-                    className={`relative ${index !== lessons.length - 1 ? 'mb-4' : ''}`}
+                    className={`relative ${index !== lessons.length - 1 ? 'mb-3' : ''}`}
                   >
-                    {/* Lesson item */}
-                    <div className={`flex items-start gap-4 ${showActions ? 'bg-pink-50 rounded-2xl p-4 -mx-2' : ''}`}>
+                    {/* Lesson item - clickable for completed/current lessons */}
+                    <button
+                      onClick={() => handleLessonClick(lesson.id, lesson.status)}
+                      disabled={lesson.status === 'locked'}
+                      data-testid={`lesson-item-${lesson.id}`}
+                      className={`w-full flex items-start gap-4 text-left transition-all rounded-2xl p-3 -mx-1 ${
+                        showExpanded 
+                          ? 'bg-pink-50' 
+                          : isAccessible 
+                            ? 'hover:bg-gray-50 cursor-pointer' 
+                            : 'cursor-default opacity-60'
+                      }`}
+                    >
                       {/* Status circle */}
-                      <div className={`relative z-10 w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      <div className={`relative z-10 w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
                         lesson.status === 'done' 
                           ? 'bg-teal-500' 
-                          : showActions
-                          ? 'bg-white border-2 border-gray-300'
-                          : 'bg-white border-2 border-gray-200'
+                          : isCurrentLesson
+                            ? 'bg-white border-2 border-teal-400 shadow-sm'
+                            : 'bg-white border-2 border-gray-200'
                       }`}>
                         {lesson.status === 'done' && (
                           <Check size={18} className="text-white" strokeWidth={3} />
@@ -207,39 +246,56 @@ const CourseLessonModal = ({ isOpen, onClose, setActiveScreen, lessons, onAllCom
                       {/* Content */}
                       <div className="flex-1 min-w-0 pt-1">
                         <div className="flex items-center justify-between">
-                          <h4 className={`font-medium ${lesson.status === 'done' ? 'text-gray-800' : 'text-gray-700'}`}>
+                          <h4 className={`font-medium ${
+                            lesson.status === 'done' 
+                              ? 'text-gray-800' 
+                              : isCurrentLesson 
+                                ? 'text-gray-800' 
+                                : 'text-gray-500'
+                          }`}>
                             {lesson.title}
                           </h4>
-                          <span className="text-sm text-gray-400 ml-2">{lesson.duration}</span>
-                        </div>
-
-                        {/* Action buttons for current lesson */}
-                        {showActions && (
-                          <div className="flex gap-2 mt-3">
-                            {/* Ribbon/Medal icon */}
-                            <div className="hidden lg:flex w-16 h-16 bg-pink-100 rounded-xl items-center justify-center mr-2">
-                              <Award size={32} className="text-pink-400" />
-                            </div>
-                            <button
-                              onClick={() => { onClose(); setActiveScreen(lesson.screen); }}
-                              data-testid="modal-read-btn"
-                              className="flex items-center gap-2 px-5 py-2.5 bg-teal-500 hover:bg-teal-600 text-white rounded-full font-medium transition-colors"
-                            >
-                              <BookOpen size={16} />
-                              Read
-                            </button>
-                            <button
-                              onClick={() => {}}
-                              data-testid="modal-listen-btn"
-                              className="flex items-center gap-2 px-5 py-2.5 bg-teal-500 hover:bg-teal-600 text-white rounded-full font-medium transition-colors"
-                            >
-                              <Volume2 size={16} />
-                              Listen
-                            </button>
+                          <div className="flex items-center gap-2 ml-2">
+                            <span className="text-sm text-gray-400">{lesson.duration}</span>
+                            {isAccessible && !showExpanded && (
+                              <ChevronRight size={16} className="text-gray-300" />
+                            )}
                           </div>
+                        </div>
+                        
+                        {/* Status label for completed lessons */}
+                        {lesson.status === 'done' && !showExpanded && (
+                          <p className="text-xs text-teal-600 mt-0.5">Completed • Tap to review</p>
                         )}
                       </div>
-                    </div>
+                    </button>
+
+                    {/* Expanded action buttons */}
+                    {showExpanded && isAccessible && (
+                      <div className="ml-12 mt-2 mb-1 flex items-center gap-3 animate-fade-in">
+                        {/* Medal icon - desktop only */}
+                        <div className="hidden lg:flex w-14 h-14 bg-pink-100 rounded-xl items-center justify-center flex-shrink-0">
+                          <Award size={28} className="text-pink-400" />
+                        </div>
+                        
+                        <button
+                          onClick={() => handleReadLesson(lesson)}
+                          data-testid={`read-lesson-${lesson.id}`}
+                          className="flex items-center gap-2 px-5 py-2.5 bg-teal-500 hover:bg-teal-600 text-white rounded-full font-medium transition-colors"
+                        >
+                          <BookOpen size={16} />
+                          Read
+                        </button>
+                        <button
+                          onClick={() => {}}
+                          data-testid={`listen-lesson-${lesson.id}`}
+                          className="flex items-center gap-2 px-5 py-2.5 bg-teal-500 hover:bg-teal-600 text-white rounded-full font-medium transition-colors"
+                        >
+                          <Volume2 size={16} />
+                          Listen
+                        </button>
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -284,11 +340,18 @@ const CourseLessonModal = ({ isOpen, onClose, setActiveScreen, lessons, onAllCom
           from { opacity: 0; transform: scale(0.95); }
           to { opacity: 1; transform: scale(1); }
         }
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(-4px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
         .animate-slide-up {
           animation: slide-up 0.3s ease-out;
         }
         .animate-fade-scale {
           animation: fade-scale 0.2s ease-out;
+        }
+        .animate-fade-in {
+          animation: fade-in 0.2s ease-out;
         }
         @media (min-width: 1024px) {
           .animate-slide-up {
