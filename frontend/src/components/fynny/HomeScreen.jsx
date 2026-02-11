@@ -468,10 +468,9 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
   );
 };
 
-const TodaysPlanSection = ({ setActiveScreen }) => {
-  // Task states - in a real app these would come from backend/state
-  // For demo: Check-in is NOT completed to show "Start here" emphasis
-  const tasks = {
+const TodaysPlanSection = ({ setActiveScreen, tasks: propTasks }) => {
+  // Use props tasks or fallback to defaults
+  const tasks = propTasks || {
     checkIn: { completed: false, value: null },
     trackSpending: { completed: false, progress: 1, total: 3 },
     setCommitment: { completed: false },
