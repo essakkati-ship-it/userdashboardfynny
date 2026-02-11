@@ -522,9 +522,12 @@ const TodaysPlanSection = ({ setActiveScreen, tasks: propTasks }) => {
           </div>
           <div className="ml-14">
             <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-1">
-              <div className="h-full w-1/3 bg-gradient-to-r from-teal-400 to-teal-500 rounded-full"></div>
+              <div 
+                className="h-full bg-gradient-to-r from-teal-400 to-teal-500 rounded-full transition-all duration-300" 
+                style={{ width: `${(tasks.trackSpending.progress / tasks.trackSpending.total) * 100}%` }}
+              ></div>
             </div>
-            <p className="text-sm text-gray-500"><span className="text-gray-800 font-medium">1</span>/3 logged today</p>
+            <p className="text-sm text-gray-500"><span className="text-gray-800 font-medium">{tasks.trackSpending.progress}</span>/{tasks.trackSpending.total} logged today</p>
           </div>
         </div>
 
