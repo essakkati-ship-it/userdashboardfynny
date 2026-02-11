@@ -263,10 +263,6 @@ const CourseLessonModal = ({ isOpen, onClose, setActiveScreen, lessons, onAllCom
                           </div>
                         </div>
                         
-                        {/* Status label for completed lessons */}
-                        {lesson.status === 'done' && !showExpanded && (
-                          <p className="text-xs text-teal-600 mt-0.5">Completed • Tap to review</p>
-                        )}
                       </div>
                     </button>
 
