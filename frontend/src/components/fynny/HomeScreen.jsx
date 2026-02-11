@@ -133,7 +133,7 @@ const MobileMicrolearningSection = ({ setActiveScreen }) => (
 
 // Course Lesson Modal - Slides up on mobile, centered on desktop
 // Allows accessing ANY lesson (completed or current)
-const CourseLessonModal = ({ isOpen, onClose, setActiveScreen, lessons, onAllComplete }) => {
+const CourseLessonModal = ({ isOpen, onClose, setActiveScreen, lessons, onAllComplete, onReadLesson }) => {
   const [selectedLessonId, setSelectedLessonId] = useState(null);
   
   if (!isOpen) return null;
@@ -157,10 +157,14 @@ const CourseLessonModal = ({ isOpen, onClose, setActiveScreen, lessons, onAllCom
     }
   };
 
-  // Navigate to lesson
+  // Navigate to lesson - use callback if provided, else fallback to screen
   const handleReadLesson = (lesson) => {
-    onClose();
-    setActiveScreen(lesson.screen);
+    if (onReadLesson) {
+      onReadLesson(lesson);
+    } else {
+      onClose();
+      setActiveScreen(lesson.screen || 'lesson');
+    }
   };
 
   return (
