@@ -354,8 +354,8 @@ Replaced content with structure from reference project using 3 brand colors:
 ---
 
 ## Next Tasks
-1. Refactor lesson screens to use shared reusable layout component (reduce code duplication)
-2. Add backend authentication (JWT or Google OAuth)
-3. Create MongoDB schemas for User, Progress, Commitment
-4. Wire up lesson completion to save progress
-5. Implement spending tracker with categories
+1. Add UI forms for mood check-in and spending entry (connect to existing APIs)
+2. Implement full JWT authentication with login/logout
+3. Refactor lesson screens to use shared LessonLayout component
+4. Add spending tracker with category selection UI
+5. Build calculator implementations
