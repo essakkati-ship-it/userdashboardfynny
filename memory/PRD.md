@@ -29,7 +29,62 @@ Fynny is a Noom-inspired financial wellbeing app that helps users build healthy 
 
 ## What's Been Implemented
 
-### Date: February 10, 2026 (Latest)
+### Date: February 11, 2026 (Latest)
+
+#### ✅ Backend API & MongoDB Integration
+Connected the frontend to a FastAPI backend with MongoDB for persisting user progress:
+
+**Backend API Endpoints (`/app/backend/server.py`):**
+- `POST /api/users` - Create or get user
+- `GET /api/users/{username}` - Get user by username
+- `GET /api/progress/{user_id}` - Get complete user progress
+- `POST /api/progress/{user_id}/lessons` - Update lesson progress
+- `GET /api/progress/{user_id}/lessons/{course_id}` - Get course lessons
+- `POST /api/progress/{user_id}/tasks` - Update daily task
+- `GET /api/progress/{user_id}/tasks` - Get today's tasks
+- `POST /api/mood/{user_id}` - Log mood check-in
+- `GET /api/mood/{user_id}` - Get mood history
+- `POST /api/spending/{user_id}` - Log spending entry
+- `GET /api/spending/{user_id}` - Get spending history
+- `POST /api/progress/{user_id}/streak` - Update streak
+- `POST /api/progress/{user_id}/complete-course` - Complete course & award bonus
+
+**MongoDB Collections:**
+- `users` - User accounts
+- `user_progress` - Fynnies, streaks, totals
+- `lesson_progress` - Individual lesson completion
+- `daily_tasks` - Check-in, spending, commitment status
+- `mood_checkins` - Mood history
+- `spending_entries` - Spending history
+- `week_status` - Daily completion status
+
+**Frontend Integration:**
+- `UserContext.jsx` - React context for user state management
+- `api.js` - API service layer for backend communication
+- Auto-creates demo user on app load
+- Real-time progress display (Fynnies, tasks, week calendar)
+- Fallback to hardcoded data if backend unavailable
+
+**Files Created:**
+- `/app/frontend/src/services/api.js` - API client
+- `/app/frontend/src/context/UserContext.jsx` - User state context
+- `/app/backend/tests/test_fynny_api.py` - API tests
+
+**Files Modified:**
+- `/app/backend/server.py` - Full API implementation
+- `/app/frontend/src/App.js` - Added UserProvider
+- `/app/frontend/src/components/fynny/HomeScreen.jsx` - Uses context for data
+
+#### ✅ Mobile Week Calendar Alignment Fix
+Fixed the week calendar alignment on mobile to fit properly within card boundaries:
+- Reduced circle sizes for mobile (w-8 h-8)
+- Added max-width constraint (320px) 
+- Centered layout with proper spacing
+- Reduced icon sizes proportionally
+
+---
+
+### Date: February 10, 2026 (Previous)
 
 #### ✅ Desktop 3-Column Layout Redesign
 Major desktop-only layout adjustment to make the dashboard wider, calmer, and more learning-focused:
