@@ -328,20 +328,22 @@ Replaced content with structure from reference project using 3 brand colors:
 ## Prioritized Backlog
 
 ### P0 - Critical (Next Phase)
-- [ ] Backend API for user authentication
-- [ ] MongoDB models for user data, progress, commitments
-- [ ] Persist lesson progress and Fynnies earned
+- [x] ~~Backend API for user authentication~~ (Implemented basic user management)
+- [x] ~~MongoDB models for user data, progress, commitments~~ (Implemented)
+- [x] ~~Persist lesson progress and Fynnies earned~~ (Implemented)
 
 ### P1 - High Priority
-- [ ] Track spending functionality (input and logging)
-- [ ] Check-in feature with mood tracking
+- [x] ~~Track spending functionality (input and logging)~~ (API implemented, UI needs full integration)
+- [x] ~~Check-in feature with mood tracking~~ (API implemented, UI needs full integration)
 - [ ] Calculator implementations (Savings, Budget, Debt Payoff, Emergency Fund)
+- [ ] Refactor lesson screens to use shared LessonLayout component
 
 ### P2 - Medium Priority
 - [ ] Audio feature for lessons (Listen button)
 - [ ] Bookmark/save lessons functionality
 - [ ] Weekly commitment reminders
 - [ ] Push notifications
+- [ ] Full authentication (JWT tokens, login/logout)
 
 ### P3 - Nice to Have
 - [ ] Social sharing of achievements
