@@ -895,7 +895,7 @@ const HomeScreen = ({ setActiveScreen, navigateToLesson }) => {
         {/* Main Center Column */}
         <div className="flex-1 min-w-0">
           {/* PROMINENT: Main Lesson - Primary focal point */}
-          <LearnWithFynnySection setActiveScreen={setActiveScreen} />
+          <LearnWithFynnySection setActiveScreen={setActiveScreen} navigateToLesson={navigateToLesson} />
 
           {/* Today's Tasks Header */}
           <h2 className="font-semibold text-gray-800 text-lg mb-3 lg:text-base">Today's Tasks</h2>
