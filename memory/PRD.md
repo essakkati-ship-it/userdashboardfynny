@@ -22,6 +22,8 @@ Fynny is a Noom-inspired financial wellbeing app that helps users build healthy 
 - **Frontend**: React 19 with Tailwind CSS
 - **Icons**: Lucide React
 - **Build**: Create React App with Craco
+- **Backend**: FastAPI with MongoDB (Motor async driver)
+- **Database**: MongoDB
 
 ---
 
