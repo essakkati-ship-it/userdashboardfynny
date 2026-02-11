@@ -743,12 +743,15 @@ const HomeScreen = ({ setActiveScreen }) => {
             <div className="flex items-center gap-3">
               <div className="flex-1">
                 <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full w-2/5 bg-gradient-to-r from-green-400 to-teal-400 rounded-full"></div>
+                  <div 
+                    className="h-full bg-gradient-to-r from-green-400 to-teal-400 rounded-full transition-all duration-500" 
+                    style={{ width: `${Math.min((fynnies / 20) * 100, 100)}%` }}
+                  ></div>
                 </div>
               </div>
             </div>
             <div className="flex items-center justify-between mt-1.5">
-              <span className="text-sm font-semibold text-gray-800">12 <span className="font-normal text-gray-400">earned</span></span>
+              <span className="text-sm font-semibold text-gray-800">{fynnies} <span className="font-normal text-gray-400">earned</span></span>
               <span className="text-sm text-gray-400">15 - 20 weekly</span>
             </div>
           </div>
