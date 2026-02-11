@@ -49,7 +49,18 @@ const Sidebar = ({ isOpen, setIsOpen, activeScreen, setActiveScreen }) => {
         </div>
 
         <div className="px-3 flex-1">
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-2 mb-2">Home</h3>
+          {/* Home Button - Icon only */}
+          <button 
+            onClick={() => setActiveScreen('home')} 
+            data-testid="nav-home"
+            className={`w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl text-left mb-2 ${activeScreen === 'home' ? 'bg-pink-50 border border-pink-200' : 'hover:bg-gray-50'}`}
+          >
+            <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${activeScreen === 'home' ? 'bg-gradient-to-br from-pink-200 to-rose-200' : 'bg-gradient-to-br from-pink-100 to-rose-100'}`}>
+              <Home className="text-pink-500" size={14} />
+            </div>
+            <span className="text-gray-700 font-medium text-sm">Home</span>
+          </button>
+
           <nav className="space-y-0.5">
             <button 
               onClick={() => setActiveScreen('financial-health')} 
