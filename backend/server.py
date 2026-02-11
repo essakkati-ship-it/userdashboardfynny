@@ -127,6 +127,77 @@ class WeekDayStatus(BaseModel):
     type: str = "none"  # none, half, fynny, streak
 
 
+# ==================== MODULE/LESSON MODELS ====================
+
+class CardContent(BaseModel):
+    """Flexible content structure for lesson cards"""
+    model_config = ConfigDict(extra="allow")
+
+class LessonCard(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    type: str  # text, list, quiz, reflection, completion, illustration
+    title: str
+    cta: str = "Continue"
+    content: Dict[str, Any] = {}
+    order: int = 0
+
+class LessonCardCreate(BaseModel):
+    type: str
+    title: str
+    cta: str = "Continue"
+    content: Dict[str, Any] = {}
+    order: int = 0
+
+class Lesson(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    module_id: str
+    title: str
+    description: Optional[str] = None
+    duration: str = "2 min"
+    order: int = 0
+    theme_color: str = "rose"
+    cards: List[Dict[str, Any]] = []
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class LessonCreate(BaseModel):
+    module_id: str
+    title: str
+    description: Optional[str] = None
+    duration: str = "2 min"
+    order: int = 0
+    theme_color: str = "rose"
+    cards: List[Dict[str, Any]] = []
+
+class Module(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    description: Optional[str] = None
+    icon: str = "BookOpen"
+    theme_color: str = "rose"
+    order: int = 0
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ModuleCreate(BaseModel):
+    title: str
+    description: Optional[str] = None
+    icon: str = "BookOpen"
+    theme_color: str = "rose"
+    order: int = 0
+
+class ModuleWithLessons(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str
+    title: str
+    description: Optional[str] = None
+    icon: str
+    theme_color: str
+    order: int
+    lessons: List[Dict[str, Any]] = []
+
+
 # ==================== HELPER FUNCTIONS ====================
 
 def get_today_str() -> str:
