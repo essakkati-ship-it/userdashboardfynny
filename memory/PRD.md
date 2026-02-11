@@ -382,12 +382,14 @@ Replaced content with structure from reference project using 3 brand colors:
 - [x] ~~Backend API for user authentication~~ (Implemented basic user management)
 - [x] ~~MongoDB models for user data, progress, commitments~~ (Implemented)
 - [x] ~~Persist lesson progress and Fynnies earned~~ (Implemented)
+- [x] ~~Refactor lesson screens to use shared layout~~ (Implemented - DynamicLessonViewer)
+- [x] ~~Dynamic modules/lessons/cards from backend~~ (Implemented)
 
 ### P1 - High Priority
 - [x] ~~Track spending functionality (input and logging)~~ (API implemented, UI needs full integration)
 - [x] ~~Check-in feature with mood tracking~~ (API implemented, UI needs full integration)
+- [ ] **Admin Panel for Module Management** - Create/edit/delete modules, lessons, cards
 - [ ] Calculator implementations (Savings, Budget, Debt Payoff, Emergency Fund)
-- [ ] Refactor lesson screens to use shared LessonLayout component
 
 ### P2 - Medium Priority
 - [ ] Audio feature for lessons (Listen button)
