@@ -407,8 +407,8 @@ Replaced content with structure from reference project using 3 brand colors:
 ---
 
 ## Next Tasks
-1. Add UI forms for mood check-in and spending entry (connect to existing APIs)
-2. Implement full JWT authentication with login/logout
-3. Refactor lesson screens to use shared LessonLayout component
-4. Add spending tracker with category selection UI
-5. Build calculator implementations
+1. Build Admin Panel for module/lesson/card management (CRUD UI)
+2. Add UI forms for mood check-in and spending entry
+3. Implement full JWT authentication with login/logout
+4. Build calculator implementations
+5. Add audio feature for lessons (Listen button)
