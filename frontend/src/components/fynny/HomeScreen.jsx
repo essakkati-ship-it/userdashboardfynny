@@ -378,30 +378,70 @@ const DiamondProgress = ({ total, completed }) => {
 };
 
 // Prominent Learn with Fynny Section - Course Card Style
-const LearnWithFynnySection = ({ setActiveScreen }) => {
-  const { progress, updateLessonProgress, completeCourse } = useUser();
+const LearnWithFynnySection = ({ setActiveScreen, navigateToLesson }) => {
+  const { progress, modules, completeCourse } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
 
-  // Default lesson data - merged with backend progress
-  const defaultLessons = [
-    { id: 1, title: 'Prepare your finances', duration: '2 min', status: 'done', screen: 'lesson' },
-    { id: 2, title: 'Discover your money style', duration: '2 min', status: 'done', screen: 'lesson-two' },
-    { id: 3, title: 'Start tracking calmly', duration: '2 min', status: 'current', screen: 'lesson' },
-  ];
-
-  // Merge with backend progress if available
-  const lessons = defaultLessons.map(lesson => {
+  // Get first module (or use hardcoded fallback)
+  const currentModule = modules[0] || { 
+    id: 'how-money-feels', 
+    title: 'How Money Feels',
+    lessons: [] 
+  };
+  
+  // Get lessons from current module with progress merged
+  const moduleLessons = currentModule.lessons || [];
+  const lessons = moduleLessons.map((lesson, index) => {
     const backendLesson = progress?.lesson_progress?.find(
-      l => l.lesson_id === lesson.id && l.course_id === 'how-money-feels'
+      l => l.lesson_id === lesson.order && l.course_id === currentModule.id
     );
-    return backendLesson ? { ...lesson, status: backendLesson.status } : lesson;
+    
+    // Determine status based on progress
+    let status = 'locked';
+    if (backendLesson?.status === 'done') {
+      status = 'done';
+    } else if (index === 0 || moduleLessons.slice(0, index).every((_, i) => {
+      const prev = progress?.lesson_progress?.find(
+        p => p.lesson_id === moduleLessons[i].order && p.course_id === currentModule.id
+      );
+      return prev?.status === 'done';
+    })) {
+      status = backendLesson?.status || (index <= progress?.total_lessons_completed ? 'done' : 'current');
+    }
+    
+    return {
+      ...lesson,
+      id: lesson.id || `lesson-${index + 1}`,
+      title: lesson.title,
+      duration: lesson.duration || '2 min',
+      status,
+      themeColor: lesson.theme_color || lesson.themeColor || 'rose',
+    };
   });
 
-  const completedCount = lessons.filter(l => l.status === 'done').length;
-  const remainingCount = lessons.length - completedCount;
-  const currentLesson = lessons.find(l => l.status === 'current') || lessons[completedCount];
-  const allCompleted = completedCount === lessons.length;
+  // Fallback if no lessons from backend
+  const displayLessons = lessons.length > 0 ? lessons : [
+    { id: 'prepare-finances', title: 'Prepare your finances', duration: '2 min', status: 'done' },
+    { id: 'discover-money-style', title: 'Discover your money style', duration: '2 min', status: 'done' },
+    { id: 'start-tracking', title: 'Start tracking calmly', duration: '2 min', status: 'current' },
+  ];
+
+  const completedCount = displayLessons.filter(l => l.status === 'done').length;
+  const remainingCount = displayLessons.length - completedCount;
+  const currentLesson = displayLessons.find(l => l.status === 'current') || displayLessons[completedCount];
+  const allCompleted = completedCount === displayLessons.length;
+
+  // Handle reading a lesson - navigate to dynamic viewer
+  const handleReadLesson = (lesson) => {
+    setIsModalOpen(false);
+    if (navigateToLesson) {
+      navigateToLesson(currentModule.id, lesson.id);
+    } else {
+      // Fallback to old static screens
+      setActiveScreen('lesson');
+    }
+  };
 
   // Handle when user completes the final lesson
   const handleLessonComplete = async () => {
@@ -409,7 +449,7 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
     setShowCelebration(true);
     // Notify backend about course completion
     try {
-      await completeCourse('how-money-feels');
+      await completeCourse(currentModule.id);
     } catch (err) {
       console.error('Failed to complete course:', err);
     }
@@ -445,7 +485,7 @@ const LearnWithFynnySection = ({ setActiveScreen }) => {
                 {allCompleted ? 'Course complete!' : 'Finish today\'s topic'}
               </h3>
               <p className="text-gray-600 text-sm mt-0.5">
-                How Money Feels
+                {currentModule.title}
               </p>
               
               {/* Current lesson highlight */}
