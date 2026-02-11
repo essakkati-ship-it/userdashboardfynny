@@ -767,7 +767,7 @@ const TodaysPlanSection = ({ setActiveScreen, tasks: propTasks }) => {
   );
 };
 
-const HomeScreen = ({ setActiveScreen }) => {
+const HomeScreen = ({ setActiveScreen, navigateToLesson }) => {
   const { progress, loading, error } = useUser();
 
   // Use data from context or fallback to defaults
