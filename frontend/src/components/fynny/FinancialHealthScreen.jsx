@@ -110,7 +110,7 @@ const FinancialHealthScreen = ({ setActiveScreen }) => {
   const maxSpending = Math.max(...spendingData.map(d => d.amount));
   const maxLessons = Math.max(...lessonsData.map(d => d.count));
   const maxWealth = Math.max(...wealthData.map(d => d.amount));
-  const maxMood = 100;
+  const maxMood = Math.max(...moodData.map(d => d.score));
 
   // TRENDS TAB - Contains Spending, Lessons, Wealth Building, Mood
   const renderTrendsTab = () => (
