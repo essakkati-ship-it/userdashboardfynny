@@ -11,6 +11,7 @@ import { getMoodFromScore } from './MoodCheckInFlow';
 const FinancialHealthScreen = ({ setActiveScreen }) => {
   const [activeTab, setActiveTab] = useState('trends');
   const [selectedMoodDay, setSelectedMoodDay] = useState(null);
+  const [showMoodGraph, setShowMoodGraph] = useState(false);
 
   // Data matching the reference project
   const spendingData = [
@@ -53,6 +54,8 @@ const FinancialHealthScreen = ({ setActiveScreen }) => {
     { day: 'S', date: 'Feb 18', score: 75, note: '' },
     { day: 'S', date: 'Feb 19', score: 85, note: 'Stayed within weekend budget' }
   ];
+
+  const maxMood = Math.max(...moodData.map(d => d.score));
 
   // Course modules for My Fynny journey
   const courseModules = [
