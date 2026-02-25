@@ -216,7 +216,7 @@ const FinancialHealthScreen = ({ setActiveScreen }) => {
         </div>
       </div>
 
-      {/* Mood Chart */}
+      {/* Mood Chart - Interactive Line Graph */}
       <div className="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm">
         <div className="flex items-center justify-between mb-1">
           <h3 className="font-semibold text-gray-800">Mood</h3>
@@ -224,20 +224,117 @@ const FinancialHealthScreen = ({ setActiveScreen }) => {
         </div>
         <p className="text-sm text-gray-500 mb-4">68/100 average daily score</p>
 
-        <div className="flex items-end justify-between h-24 gap-2">
-          {moodData.map((item, index) => (
-            <div key={index} className="flex-1 flex flex-col items-center">
-              <div className="w-full bg-gray-100 rounded-t-lg relative" style={{ height: '80px' }}>
-                <div
-                  className="absolute bottom-0 w-full rounded-t-lg bg-indigo-500"
-                  style={{ height: `${(item.score / maxMood) * 100}%`, minHeight: '8px' }}
-                />
-              </div>
-              <span className="text-xs text-gray-500 mt-2 font-medium">{item.day}</span>
-            </div>
+        {/* Line Graph */}
+        <div className="relative h-40 mb-4">
+          {/* Y-axis labels */}
+          <div className="absolute left-0 top-0 bottom-0 w-8 flex flex-col justify-between text-xs text-gray-400 pr-2">
+            <span>100</span>
+            <span>80</span>
+            <span>60</span>
+            <span>40</span>
+            <span>20</span>
+            <span>0</span>
+          </div>
+          
+          {/* Grid lines */}
+          <div className="absolute left-8 right-0 top-0 bottom-0">
+            {[0, 20, 40, 60, 80, 100].map((val) => (
+              <div 
+                key={val} 
+                className="absolute w-full border-t border-gray-100"
+                style={{ top: `${100 - val}%` }}
+              />
+            ))}
+          </div>
+          
+          {/* SVG Line Chart */}
+          <svg className="absolute left-8 right-0 top-0 bottom-0" viewBox="0 0 280 140" preserveAspectRatio="none">
+            {/* Line path */}
+            <path
+              d={moodData.map((d, i) => {
+                const x = (i / (moodData.length - 1)) * 260 + 10;
+                const y = 140 - (d.score / 100) * 130 - 5;
+                return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
+              }).join(' ')}
+              fill="none"
+              stroke="#CBD5E1"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          
+          {/* Data points */}
+          <div className="absolute left-8 right-0 top-0 bottom-0">
+            {moodData.map((d, i) => {
+              const mood = getMoodFromScore(d.score);
+              const leftPercent = (i / (moodData.length - 1)) * 100;
+              const bottomPercent = (d.score / 100) * 93;
+              const isSelected = selectedMoodDay === i;
+              
+              return (
+                <div key={i} className="absolute" style={{ left: `${leftPercent}%`, bottom: `${bottomPercent}%`, transform: 'translate(-50%, 50%)' }}>
+                  {/* Tooltip popup */}
+                  {isSelected && (
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-20 animate-fade-in">
+                      <div className="bg-gray-800 rounded-xl p-3 shadow-lg min-w-[120px]">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-2xl font-bold text-white">{d.score}</span>
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); setSelectedMoodDay(null); }}
+                            className="text-gray-400 hover:text-white"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                        <p className="text-gray-400 text-xs uppercase mb-2">{d.date}</p>
+                        {d.note ? (
+                          <div className="flex items-center gap-1 text-white text-xs bg-gray-700 rounded-lg px-2 py-1.5">
+                            <Pencil size={10} />
+                            <span className="truncate">{d.note.length > 20 ? d.note.slice(0, 20) + '...' : d.note}</span>
+                          </div>
+                        ) : (
+                          <button className="flex items-center gap-1 text-gray-400 text-xs hover:text-white">
+                            <Pencil size={10} />
+                            <span>Add Note</span>
+                          </button>
+                        )}
+                      </div>
+                      {/* Arrow */}
+                      <div className="absolute left-1/2 -translate-x-1/2 -bottom-1 w-2 h-2 bg-gray-800 rotate-45" />
+                    </div>
+                  )}
+                  
+                  {/* Data point circle */}
+                  <button
+                    onClick={() => setSelectedMoodDay(isSelected ? null : i)}
+                    className={`w-4 h-4 rounded-full border-2 border-white shadow-md transition-transform hover:scale-125 ${isSelected ? 'scale-125' : ''}`}
+                    style={{ backgroundColor: mood.color }}
+                    data-testid={`mood-point-${i}`}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* X-axis labels (dates) */}
+        <div className="flex justify-between text-xs text-gray-500 pl-8">
+          {moodData.map((d, i) => (
+            <span key={i} className="text-center">{d.date.split(' ')[1]}</span>
           ))}
         </div>
       </div>
+
+      <style>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translate(-50%, 50%) translateY(4px); }
+          to { opacity: 1; transform: translate(-50%, 50%) translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.2s ease-out forwards;
+        }
+      `}</style>
     </div>
   );
 
