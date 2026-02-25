@@ -4,11 +4,13 @@ import {
   ArrowUp, ArrowDown, ArrowRight, DollarSign, ShoppingCart, Coffee, Home,
   Car, Utensils, Sparkles, Heart, Target, BarChart3, PieChart,
   Activity, Zap, Star, ChevronRight, BookOpen, Smile, Brain,
-  Mountain, Briefcase, Wallet, PiggyBank
+  Mountain, Briefcase, Wallet, PiggyBank, Pencil, X
 } from 'lucide-react';
+import { getMoodFromScore } from './MoodCheckInFlow';
 
 const FinancialHealthScreen = ({ setActiveScreen }) => {
   const [activeTab, setActiveTab] = useState('trends');
+  const [selectedMoodDay, setSelectedMoodDay] = useState(null);
 
   // Data matching the reference project
   const spendingData = [
@@ -41,14 +43,15 @@ const FinancialHealthScreen = ({ setActiveScreen }) => {
     { day: 'S', amount: 90 }
   ];
 
+  // Enhanced mood data with dates and notes
   const moodData = [
-    { day: 'M', score: 65 },
-    { day: 'T', score: 45 },
-    { day: 'W', score: 70 },
-    { day: 'T', score: 55 },
-    { day: 'F', score: 80 },
-    { day: 'S', score: 75 },
-    { day: 'S', score: 85 }
+    { day: 'M', date: 'Feb 13', score: 65, note: 'Felt a bit anxious about bills' },
+    { day: 'T', date: 'Feb 14', score: 45, note: 'Unexpected expense came up' },
+    { day: 'W', date: 'Feb 15', score: 70, note: '' },
+    { day: 'T', date: 'Feb 16', score: 55, note: 'Working on budget helped' },
+    { day: 'F', date: 'Feb 17', score: 80, note: 'Payday - feeling good!' },
+    { day: 'S', date: 'Feb 18', score: 75, note: '' },
+    { day: 'S', date: 'Feb 19', score: 85, note: 'Stayed within weekend budget' }
   ];
 
   // Course modules for My Fynny journey
