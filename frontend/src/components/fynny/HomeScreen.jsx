@@ -926,7 +926,7 @@ const HomeScreen = ({ setActiveScreen, navigateToLesson }) => {
           <h2 className="font-semibold text-gray-800 text-lg mb-3 lg:text-base">Today's Tasks</h2>
 
           {/* Today's Tasks Cards - compact on desktop */}
-          <TodaysPlanSection setActiveScreen={setActiveScreen} tasks={tasks} />
+          <TodaysPlanSection setActiveScreen={setActiveScreen} tasks={tasks} onCheckIn={() => setShowMoodCheckIn(true)} />
 
           {/* Mobile only: Microlearning Section (horizontal scroll) */}
           <div className="mt-6 lg:hidden">
@@ -940,6 +940,13 @@ const HomeScreen = ({ setActiveScreen, navigateToLesson }) => {
         </div>
       </div>
     </div>
+
+    {/* Mood Check-in Flow */}
+    <MoodCheckInFlow 
+      isOpen={showMoodCheckIn} 
+      onClose={() => setShowMoodCheckIn(false)} 
+    />
+    </>
   );
 };
 
