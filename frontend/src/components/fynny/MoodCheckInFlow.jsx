@@ -1,39 +1,39 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Lightbulb, Briefcase, Heart, Moon, Dumbbell, Cloud, Users, Home, Backpack, Car, Stethoscope, ChevronRight, Pencil } from 'lucide-react';
+import { X, Lightbulb, ChevronRight, Pencil, Receipt, TrendingDown, Users, Sparkles, ShoppingBag, CreditCard, LineChart, Home, Briefcase, Heart } from 'lucide-react';
 import { useUser } from '../../context/UserContext';
 
-// Money-focused mood options
+// Money-focused mood options (0 to 100 based on order)
 const MOOD_OPTIONS = [
-  { id: 'calm', label: 'Calm', value: 100, color: '#14B8A6', emoji: '😌' },
-  { id: 'confident', label: 'Confident', value: 85, color: '#10B981', emoji: '💪' },
-  { id: 'motivated', label: 'Motivated', value: 70, color: '#F59E0B', emoji: '🔥' },
-  { id: 'slightly-stressed', label: 'Slightly stressed', value: 50, color: '#FBBF24', emoji: '😐' },
-  { id: 'overwhelmed', label: 'Overwhelmed', value: 30, color: '#F97316', emoji: '😰' },
-  { id: 'avoiding-it', label: 'Avoiding it', value: 15, color: '#EF4444', emoji: '🙈' },
+  { id: 'overwhelmed', label: 'Overwhelmed', value: 8, color: '#EF4444', emoji: '😰' },
+  { id: 'avoiding-it', label: 'Avoiding it', value: 25, color: '#F97316', emoji: '🙈' },
+  { id: 'pressured', label: 'Pressured', value: 42, color: '#FBBF24', emoji: '😣' },
+  { id: 'slightly-stressed', label: 'Slightly stressed', value: 58, color: '#FCD34D', emoji: '😐' },
+  { id: 'motivated', label: 'Motivated', value: 75, color: '#34D399', emoji: '🔥' },
+  { id: 'calm', label: 'Calm', value: 92, color: '#14B8A6', emoji: '😌' },
 ];
 
-// Contributing factors
+// Financial contributing factors
 const CONTRIBUTING_FACTORS = [
-  { id: 'work', label: 'Work', icon: Briefcase },
-  { id: 'health', label: 'Health', icon: Stethoscope },
-  { id: 'sleep', label: 'Sleep', icon: Moon },
-  { id: 'exercise', label: 'Exercise', icon: Dumbbell },
-  { id: 'weather', label: 'Weather', icon: Cloud },
-  { id: 'relationship', label: 'Relationship', icon: Heart },
-  { id: 'family', label: 'Family', icon: Home },
-  { id: 'friends', label: 'Friends', icon: Users },
-  { id: 'activities', label: 'Activities', icon: Backpack },
-  { id: 'travel', label: 'Travel', icon: Car },
+  { id: 'bills', label: 'Bills', icon: Receipt },
+  { id: 'income-instability', label: 'Income instability', icon: TrendingDown },
+  { id: 'comparison', label: 'Comparison', icon: Users },
+  { id: 'life-change', label: 'Life change', icon: Sparkles },
+  { id: 'big-purchase', label: 'Big purchase', icon: ShoppingBag },
+  { id: 'debt', label: 'Debt', icon: CreditCard },
+  { id: 'investment-risk', label: 'Investment risk', icon: LineChart },
+  { id: 'family-pressure', label: 'Family pressure', icon: Home },
+  { id: 'career-uncertainty', label: 'Career uncertainty', icon: Briefcase },
+  { id: 'relationship-changes', label: 'Relationship changes', icon: Heart },
 ];
 
-// Get mood info from score
+// Get mood info from score (0-100 scale)
 const getMoodFromScore = (score) => {
-  if (score >= 90) return MOOD_OPTIONS[0]; // Calm
-  if (score >= 75) return MOOD_OPTIONS[1]; // Confident
-  if (score >= 60) return MOOD_OPTIONS[2]; // Motivated
-  if (score >= 40) return MOOD_OPTIONS[3]; // Slightly stressed
-  if (score >= 20) return MOOD_OPTIONS[4]; // Overwhelmed
-  return MOOD_OPTIONS[5]; // Avoiding it
+  if (score >= 84) return MOOD_OPTIONS[5]; // Calm
+  if (score >= 67) return MOOD_OPTIONS[4]; // Motivated
+  if (score >= 50) return MOOD_OPTIONS[3]; // Slightly stressed
+  if (score >= 33) return MOOD_OPTIONS[2]; // Pressured
+  if (score >= 17) return MOOD_OPTIONS[1]; // Avoiding it
+  return MOOD_OPTIONS[0]; // Overwhelmed
 };
 
 // Mood Blob Component - Animated face that changes expression
