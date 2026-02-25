@@ -55,8 +55,6 @@ const FinancialHealthScreen = ({ setActiveScreen }) => {
     { day: 'S', date: 'Feb 19', score: 85, note: 'Stayed within weekend budget' }
   ];
 
-  const maxMood = Math.max(...moodData.map(d => d.score));
-
   // Course modules for My Fynny journey
   const courseModules = [
     {
