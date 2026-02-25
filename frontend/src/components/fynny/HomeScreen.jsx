@@ -698,7 +698,7 @@ const TodaysPlanSection = ({ setActiveScreen, tasks: propTasks, onCheckIn }) => 
         ) : (
           // ACTIVE STATE - "Start here" emphasis with glow
           <button
-            onClick={() => {}}
+            onClick={onCheckIn}
             data-testid="desktop-check-in-card"
             className="group bg-white rounded-2xl border-2 border-amber-300 p-5 hover:shadow-lg hover:border-amber-400 hover:bg-amber-50/30 transition-all h-[150px] flex flex-col text-left cursor-pointer shadow-[0_0_12px_rgba(251,191,36,0.15)]"
           >
