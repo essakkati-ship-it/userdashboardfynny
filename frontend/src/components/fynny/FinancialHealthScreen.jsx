@@ -273,6 +273,7 @@ const FinancialHealthScreen = ({ setActiveScreen }) => {
               <button 
                 onClick={() => { setShowMoodGraph(false); setSelectedMoodDay(null); }}
                 className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200"
+                data-testid="close-mood-graph-modal"
               >
                 <X size={20} className="text-gray-600" />
               </button>
@@ -302,32 +303,25 @@ const FinancialHealthScreen = ({ setActiveScreen }) => {
                   ))}
                 </div>
                 
-                {/* SVG Line Chart - Fixed to connect properly */}
+                {/* SVG Line Chart - Using viewBox for proper scaling */}
                 <svg 
-                  className="absolute left-10 right-2 top-0 bottom-8" 
+                  className="absolute left-10 right-2 top-0 bottom-8 w-full h-full" 
+                  viewBox="0 0 100 100"
                   preserveAspectRatio="none"
                   style={{ overflow: 'visible' }}
                 >
-                  <defs>
-                    <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#F97316" />
-                      <stop offset="50%" stopColor="#FBBF24" />
-                      <stop offset="100%" stopColor="#14B8A6" />
-                    </linearGradient>
-                  </defs>
                   {/* Line path connecting all points */}
                   <polyline
                     points={moodData.map((d, i) => {
                       const x = (i / (moodData.length - 1)) * 100;
                       const y = 100 - d.score;
-                      return `${x}%,${y}%`;
+                      return `${x},${y}`;
                     }).join(' ')}
                     fill="none"
                     stroke="#94A3B8"
-                    strokeWidth="2"
+                    strokeWidth="0.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    vectorEffect="non-scaling-stroke"
                   />
                 </svg>
                 
