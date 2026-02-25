@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { X, Lightbulb, Briefcase, Heart, Moon, Dumbbell, Cloud, Users, Home, Backpack, Car, Stethoscope, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Lightbulb, Briefcase, Heart, Moon, Dumbbell, Cloud, Users, Home, Backpack, Car, Stethoscope, ChevronRight, Pencil } from 'lucide-react';
 import { useUser } from '../../context/UserContext';
 
-// Mood levels with colors and expressions
-const MOOD_LEVELS = [
-  { value: 0, label: 'Very unpleasant', color: '#5EADB0', expression: 'very-sad' },
-  { value: 20, label: 'Unpleasant', color: '#7BC5A8', expression: 'sad' },
-  { value: 40, label: 'Slightly unpleasant', color: '#A8D99C', expression: 'neutral-sad' },
-  { value: 60, label: 'Slightly pleasant', color: '#C5E88B', expression: 'neutral-happy' },
-  { value: 80, label: 'Pleasant', color: '#E8D166', expression: 'happy' },
-  { value: 100, label: 'Very pleasant', color: '#F5B74E', expression: 'very-happy' },
+// Money-focused mood options
+const MOOD_OPTIONS = [
+  { id: 'calm', label: 'Calm', value: 100, color: '#14B8A6', emoji: '😌' },
+  { id: 'confident', label: 'Confident', value: 85, color: '#10B981', emoji: '💪' },
+  { id: 'motivated', label: 'Motivated', value: 70, color: '#F59E0B', emoji: '🔥' },
+  { id: 'slightly-stressed', label: 'Slightly stressed', value: 50, color: '#FBBF24', emoji: '😐' },
+  { id: 'overwhelmed', label: 'Overwhelmed', value: 30, color: '#F97316', emoji: '😰' },
+  { id: 'avoiding-it', label: 'Avoiding it', value: 15, color: '#EF4444', emoji: '🙈' },
 ];
 
 // Contributing factors
@@ -26,32 +26,34 @@ const CONTRIBUTING_FACTORS = [
   { id: 'travel', label: 'Travel', icon: Car },
 ];
 
+// Get mood info from score
+const getMoodFromScore = (score) => {
+  if (score >= 90) return MOOD_OPTIONS[0]; // Calm
+  if (score >= 75) return MOOD_OPTIONS[1]; // Confident
+  if (score >= 60) return MOOD_OPTIONS[2]; // Motivated
+  if (score >= 40) return MOOD_OPTIONS[3]; // Slightly stressed
+  if (score >= 20) return MOOD_OPTIONS[4]; // Overwhelmed
+  return MOOD_OPTIONS[5]; // Avoiding it
+};
+
 // Mood Blob Component - Animated face that changes expression
 const MoodBlob = ({ moodValue }) => {
-  // Get color based on mood value
-  const getColor = () => {
-    if (moodValue <= 20) return '#14B8A6'; // teal-500
-    if (moodValue <= 40) return '#5EEAD4'; // teal-300
-    if (moodValue <= 60) return '#FCD34D'; // amber-300
-    if (moodValue <= 80) return '#FBBF24'; // amber-400
-    return '#F59E0B'; // amber-500
-  };
-
+  const mood = getMoodFromScore(moodValue);
+  
   // Get expression based on mood value
   const getExpression = () => {
-    if (moodValue <= 10) return { eyeY: 45, mouthPath: 'M 30 70 Q 50 55 70 70', eyebrowRotate: 15 };
-    if (moodValue <= 30) return { eyeY: 43, mouthPath: 'M 30 65 Q 50 58 70 65', eyebrowRotate: 8 };
-    if (moodValue <= 50) return { eyeY: 42, mouthPath: 'M 35 62 L 65 62', eyebrowRotate: 0 };
-    if (moodValue <= 70) return { eyeY: 40, mouthPath: 'M 30 60 Q 50 68 70 60', eyebrowRotate: -5 };
+    if (moodValue <= 20) return { eyeY: 45, mouthPath: 'M 30 70 Q 50 55 70 70', eyebrowRotate: 15 };
+    if (moodValue <= 35) return { eyeY: 43, mouthPath: 'M 30 65 Q 50 58 70 65', eyebrowRotate: 8 };
+    if (moodValue <= 55) return { eyeY: 42, mouthPath: 'M 35 62 L 65 62', eyebrowRotate: 0 };
+    if (moodValue <= 75) return { eyeY: 40, mouthPath: 'M 30 60 Q 50 68 70 60', eyebrowRotate: -5 };
     if (moodValue <= 90) return { eyeY: 38, mouthPath: 'M 28 58 Q 50 72 72 58', eyebrowRotate: -8 };
     return { eyeY: 36, mouthPath: 'M 25 55 Q 50 78 75 55', eyebrowRotate: -12 };
   };
 
-  const color = getColor();
   const { eyeY, mouthPath, eyebrowRotate } = getExpression();
 
   return (
-    <div className="relative w-40 h-40 mx-auto mb-6">
+    <div className="relative w-36 h-36 mx-auto mb-4">
       <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-lg">
         {/* Blob body */}
         <ellipse 
@@ -59,7 +61,7 @@ const MoodBlob = ({ moodValue }) => {
           cy="55" 
           rx="42" 
           ry="38" 
-          fill={color}
+          fill={mood.color}
           className="transition-all duration-300"
         />
         
@@ -114,7 +116,7 @@ const MoodBlob = ({ moodValue }) => {
         />
         
         {/* Blush cheeks when happy */}
-        {moodValue > 60 && (
+        {moodValue > 70 && (
           <>
             <circle cx="25" cy="55" r="6" fill="#FDA4AF" opacity="0.5" />
             <circle cx="75" cy="55" r="6" fill="#FDA4AF" opacity="0.5" />
@@ -125,19 +127,121 @@ const MoodBlob = ({ moodValue }) => {
   );
 };
 
-// Mood Slider Screen
-const MoodSliderScreen = ({ moodValue, setMoodValue, onNext, onClose }) => {
-  const getMoodLabel = () => {
-    if (moodValue <= 10) return 'Very unpleasant';
-    if (moodValue <= 30) return 'Unpleasant';
-    if (moodValue <= 50) return 'Slightly unpleasant';
-    if (moodValue <= 70) return 'Slightly pleasant';
-    if (moodValue <= 90) return 'Pleasant';
-    return 'Very pleasant';
+// Custom Touch-Friendly Slider Component
+const TouchSlider = ({ value, onChange, min = 0, max = 100 }) => {
+  const sliderRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const calculateValue = (clientX) => {
+    if (!sliderRef.current) return value;
+    const rect = sliderRef.current.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, x / rect.width));
+    return Math.round(percentage * (max - min) + min);
   };
 
+  const handleStart = (clientX) => {
+    setIsDragging(true);
+    onChange(calculateValue(clientX));
+  };
+
+  const handleMove = (clientX) => {
+    if (isDragging) {
+      onChange(calculateValue(clientX));
+    }
+  };
+
+  const handleEnd = () => {
+    setIsDragging(false);
+  };
+
+  // Mouse events
+  const handleMouseDown = (e) => {
+    e.preventDefault();
+    handleStart(e.clientX);
+  };
+
+  const handleMouseMove = (e) => {
+    handleMove(e.clientX);
+  };
+
+  const handleMouseUp = () => {
+    handleEnd();
+  };
+
+  // Touch events
+  const handleTouchStart = (e) => {
+    handleStart(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    e.preventDefault();
+    handleMove(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    handleEnd();
+  };
+
+  // Add/remove global event listeners
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('touchmove', handleTouchMove, { passive: false });
+      window.addEventListener('touchend', handleTouchEnd);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [isDragging]);
+
+  const percentage = ((value - min) / (max - min)) * 100;
+  const mood = getMoodFromScore(value);
+
   return (
-    <div className="flex flex-col h-full">
+    <div className="w-full px-2">
+      {/* Slider track */}
+      <div 
+        ref={sliderRef}
+        className="relative h-3 bg-gradient-to-r from-red-400 via-amber-400 to-teal-400 rounded-full cursor-pointer touch-none"
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+        data-testid="mood-slider-track"
+      >
+        {/* Thumb */}
+        <div 
+          className={`absolute top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg border-4 transition-transform ${isDragging ? 'scale-110' : ''}`}
+          style={{ 
+            left: `calc(${percentage}% - 16px)`,
+            borderColor: mood.color,
+          }}
+        />
+      </div>
+      
+      {/* Scale labels */}
+      <div className="flex justify-between text-xs text-gray-400 mt-2 px-1">
+        <span>0</span>
+        <span>20</span>
+        <span>40</span>
+        <span>60</span>
+        <span>80</span>
+        <span>100</span>
+      </div>
+    </div>
+  );
+};
+
+// Mood Slider Screen
+const MoodSliderScreen = ({ moodValue, setMoodValue, onNext, onClose }) => {
+  const mood = getMoodFromScore(moodValue);
+
+  return (
+    <div className="flex flex-col h-full bg-white">
       {/* Header */}
       <div className="flex items-center justify-between p-4">
         <button className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center">
@@ -154,50 +258,44 @@ const MoodSliderScreen = ({ moodValue, setMoodValue, onNext, onClose }) => {
 
       {/* Content */}
       <div className="flex-1 flex flex-col items-center justify-center px-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-8">How are you feeling?</h1>
+        <h1 className="text-xl font-bold text-gray-800 mb-2 text-center">How are you feeling about money today?</h1>
         
         {/* Mood Blob */}
         <MoodBlob moodValue={moodValue} />
         
-        {/* Mood Label */}
-        <p className="text-gray-600 text-lg mb-2">I am feeling</p>
-        <p className="text-xl font-semibold text-gray-800 mb-10 capitalize">{getMoodLabel()}</p>
-        
-        {/* Slider */}
-        <div className="w-full max-w-sm">
-          {/* Slider track */}
-          <div className="relative h-2 bg-gradient-to-r from-teal-400 via-amber-300 to-amber-500 rounded-full mb-3">
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={moodValue}
-              onChange={(e) => setMoodValue(parseInt(e.target.value))}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              data-testid="mood-slider"
-            />
-            {/* Slider thumb indicator */}
-            <div 
-              className="absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white rounded-full shadow-lg border-2 border-gray-200 transition-all duration-100"
-              style={{ left: `calc(${moodValue}% - 12px)` }}
-            />
-          </div>
-          
-          {/* Scale markers */}
-          <div className="flex justify-between text-xs text-gray-400 px-1">
-            <span>0</span>
-            <span>20</span>
-            <span>40</span>
-            <span>60</span>
-            <span>80</span>
-            <span>100</span>
-          </div>
+        {/* Mood Label with Score */}
+        <div className="text-center mb-6">
+          <p className="text-2xl font-bold" style={{ color: mood.color }}>{mood.label}</p>
+          <p className="text-4xl font-bold text-gray-800 mt-1">{moodValue}</p>
         </div>
         
-        {/* Bottom label */}
-        <p className="text-sm font-semibold text-gray-500 mt-8 uppercase tracking-wider">
-          {getMoodLabel()}
-        </p>
+        {/* Touch-Friendly Slider */}
+        <div className="w-full max-w-sm mb-6">
+          <TouchSlider 
+            value={moodValue} 
+            onChange={setMoodValue}
+            min={0}
+            max={100}
+          />
+        </div>
+        
+        {/* Mood Options Quick Select */}
+        <div className="flex flex-wrap justify-center gap-2 mb-4">
+          {MOOD_OPTIONS.map((option) => (
+            <button
+              key={option.id}
+              onClick={() => setMoodValue(option.value)}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                mood.id === option.id 
+                  ? 'text-white shadow-md' 
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+              style={mood.id === option.id ? { backgroundColor: option.color } : {}}
+            >
+              {option.emoji} {option.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Next Button */}
@@ -225,7 +323,7 @@ const ContributingFactorsScreen = ({ selectedFactors, setSelectedFactors, note, 
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-white">
       {/* Header */}
       <div className="flex items-center justify-between p-4">
         <button 
@@ -280,10 +378,14 @@ const ContributingFactorsScreen = ({ selectedFactors, setSelectedFactors, note, 
         
         {/* Note input */}
         <div className="mb-4">
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-600 mb-2">
+            <Pencil size={14} />
+            Add a note (optional)
+          </label>
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder="Any specific details?"
+            placeholder="Any specific details about how you're feeling?"
             rows={3}
             data-testid="mood-note-input"
             className="w-full p-4 border-2 border-gray-200 rounded-2xl focus:border-teal-400 focus:outline-none resize-none text-gray-700 placeholder-gray-400"
@@ -307,17 +409,10 @@ const ContributingFactorsScreen = ({ selectedFactors, setSelectedFactors, note, 
 
 // Success/Confirmation Screen
 const MoodSuccessScreen = ({ moodValue, onClose }) => {
-  const getMoodLabel = () => {
-    if (moodValue <= 10) return 'Very unpleasant';
-    if (moodValue <= 30) return 'Unpleasant';
-    if (moodValue <= 50) return 'Slightly unpleasant';
-    if (moodValue <= 70) return 'Slightly pleasant';
-    if (moodValue <= 90) return 'Pleasant';
-    return 'Very pleasant';
-  };
+  const mood = getMoodFromScore(moodValue);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-white">
       {/* Header */}
       <div className="flex items-center justify-end p-4">
         <button 
@@ -338,9 +433,10 @@ const MoodSuccessScreen = ({ moodValue, onClose }) => {
         </div>
         
         <h1 className="text-2xl font-bold text-gray-800 mb-2">Check-in complete!</h1>
-        <p className="text-gray-600 text-center mb-4">
-          You logged feeling <span className="font-semibold text-teal-600">{getMoodLabel().toLowerCase()}</span>
+        <p className="text-gray-600 text-center mb-2">
+          You logged feeling <span className="font-semibold" style={{ color: mood.color }}>{mood.label.toLowerCase()}</span>
         </p>
+        <p className="text-3xl font-bold text-gray-800 mb-6">Score: {moodValue}</p>
         
         {/* Fynny earned */}
         <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-4 flex items-center gap-3 mb-8">
@@ -403,16 +499,9 @@ const MoodCheckInFlow = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   const handleDone = async () => {
-    // Get mood label
-    let moodLabel = 'neutral';
-    if (moodValue <= 10) moodLabel = 'very-unpleasant';
-    else if (moodValue <= 30) moodLabel = 'unpleasant';
-    else if (moodValue <= 50) moodLabel = 'slightly-unpleasant';
-    else if (moodValue <= 70) moodLabel = 'slightly-pleasant';
-    else if (moodValue <= 90) moodLabel = 'pleasant';
-    else moodLabel = 'very-pleasant';
+    const mood = getMoodFromScore(moodValue);
 
-    // Create note with factors
+    // Create note with factors and score
     const fullNote = [
       `Score: ${moodValue}`,
       selectedFactors.length > 0 ? `Factors: ${selectedFactors.join(', ')}` : '',
@@ -420,7 +509,7 @@ const MoodCheckInFlow = ({ isOpen, onClose }) => {
     ].filter(Boolean).join(' | ');
 
     try {
-      await logMoodCheckIn(moodLabel, fullNote);
+      await logMoodCheckIn(mood.label, fullNote);
     } catch (err) {
       console.error('Failed to log mood:', err);
     }
@@ -465,3 +554,4 @@ const MoodCheckInFlow = ({ isOpen, onClose }) => {
 };
 
 export default MoodCheckInFlow;
+export { MOOD_OPTIONS, getMoodFromScore };
