@@ -40,14 +40,14 @@ const getMoodFromScore = (score) => {
 const MoodBlob = ({ moodValue }) => {
   const mood = getMoodFromScore(moodValue);
   
-  // Get expression based on mood value
+  // Get expression based on mood value (0=overwhelmed, 100=calm)
   const getExpression = () => {
-    if (moodValue <= 20) return { eyeY: 45, mouthPath: 'M 30 70 Q 50 55 70 70', eyebrowRotate: 15 };
-    if (moodValue <= 35) return { eyeY: 43, mouthPath: 'M 30 65 Q 50 58 70 65', eyebrowRotate: 8 };
-    if (moodValue <= 55) return { eyeY: 42, mouthPath: 'M 35 62 L 65 62', eyebrowRotate: 0 };
-    if (moodValue <= 75) return { eyeY: 40, mouthPath: 'M 30 60 Q 50 68 70 60', eyebrowRotate: -5 };
-    if (moodValue <= 90) return { eyeY: 38, mouthPath: 'M 28 58 Q 50 72 72 58', eyebrowRotate: -8 };
-    return { eyeY: 36, mouthPath: 'M 25 55 Q 50 78 75 55', eyebrowRotate: -12 };
+    if (moodValue <= 17) return { eyeY: 45, mouthPath: 'M 30 70 Q 50 55 70 70', eyebrowRotate: 15 }; // Overwhelmed
+    if (moodValue <= 33) return { eyeY: 43, mouthPath: 'M 30 65 Q 50 58 70 65', eyebrowRotate: 10 }; // Avoiding it
+    if (moodValue <= 50) return { eyeY: 42, mouthPath: 'M 32 63 Q 50 56 68 63', eyebrowRotate: 5 }; // Pressured
+    if (moodValue <= 67) return { eyeY: 41, mouthPath: 'M 35 62 L 65 62', eyebrowRotate: 0 }; // Slightly stressed
+    if (moodValue <= 84) return { eyeY: 39, mouthPath: 'M 30 58 Q 50 68 70 58', eyebrowRotate: -5 }; // Motivated
+    return { eyeY: 36, mouthPath: 'M 25 55 Q 50 75 75 55', eyebrowRotate: -10 }; // Calm
   };
 
   const { eyeY, mouthPath, eyebrowRotate } = getExpression();
