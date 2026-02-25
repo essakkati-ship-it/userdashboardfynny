@@ -602,18 +602,23 @@ const TodaysPlanSection = ({ setActiveScreen, tasks: propTasks, onCheckIn }) => 
       <div className="space-y-3 lg:hidden">
         {/* 1. Check In Card - FIRST (easiest task) */}
         {tasks.checkIn.completed ? (
-          // COMPLETED STATE - Softened, muted appearance
-          <div className="bg-gray-50 rounded-2xl border border-gray-100 p-4 opacity-80" data-testid="check-in-card-done">
+          // COMPLETED STATE - Clickable to modify mood
+          <button 
+            onClick={onCheckIn}
+            className="w-full bg-gray-50 rounded-2xl border border-gray-200 p-4 text-left hover:bg-gray-100 hover:border-gray-300 transition-all group" 
+            data-testid="check-in-card-done"
+          >
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full flex items-center justify-center border-2 border-amber-200 bg-amber-50">
+              <div className="w-11 h-11 rounded-full flex items-center justify-center border-2 border-amber-200 bg-amber-50 group-hover:border-amber-300 transition-colors">
                 <Check size={20} className="text-amber-500" strokeWidth={3} />
               </div>
-              <div>
-                <span className="font-medium text-gray-500">Mood logged</span>
+              <div className="flex-1">
+                <span className="font-medium text-gray-600">Mood logged</span>
                 <p className="text-sm text-gray-400">{tasks.checkIn.value}</p>
               </div>
+              <ChevronRight size={18} className="text-gray-300 group-hover:text-gray-500 transition-colors" />
             </div>
-          </div>
+          </button>
         ) : (
           // ACTIVE STATE - Clickable
           <button 
