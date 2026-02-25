@@ -682,24 +682,26 @@ const TodaysPlanSection = ({ setActiveScreen, tasks: propTasks, onCheckIn }) => 
       <div className="hidden lg:grid lg:grid-cols-3 lg:gap-4">
         {/* 1. Check In Card - FIRST (easiest task, "Start here" cue) */}
         {tasks.checkIn.completed ? (
-          // COMPLETED STATE - Softened, muted appearance with checkmark
-          <div 
-            className="bg-gray-50/80 rounded-2xl border border-gray-100 p-5 h-[150px] flex flex-col cursor-default"
+          // COMPLETED STATE - Clickable to modify mood
+          <button
+            onClick={onCheckIn}
+            className="group bg-gray-50/80 rounded-2xl border border-gray-200 p-5 h-[150px] flex flex-col text-left hover:bg-gray-100 hover:border-gray-300 transition-all cursor-pointer"
             data-testid="desktop-check-in-card-done"
           >
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center border-2 border-amber-200 bg-amber-50 flex-shrink-0">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center border-2 border-amber-200 bg-amber-50 flex-shrink-0 group-hover:border-amber-300 transition-colors">
                   <Check size={18} className="text-amber-500" strokeWidth={3} />
                 </div>
-                <span className="font-medium text-gray-400 text-sm">Mood logged</span>
+                <span className="font-medium text-gray-500 text-sm">Mood logged</span>
               </div>
+              <ChevronRight size={18} className="text-gray-300 group-hover:text-gray-500 transition-colors" />
             </div>
             <div className="flex-1 flex flex-col justify-end">
-              <p className="text-sm text-gray-500">{tasks.checkIn.value}</p>
-              <p className="text-xs text-gray-300 mt-1">Completed today</p>
+              <p className="text-sm text-gray-600">{tasks.checkIn.value}</p>
+              <p className="text-xs text-gray-400 mt-1 group-hover:text-amber-600 transition-colors">Tap to modify</p>
             </div>
-          </div>
+          </button>
         ) : (
           // ACTIVE STATE - "Start here" emphasis with glow
           <button
