@@ -588,7 +588,7 @@ const LearnWithFynnySection = ({ setActiveScreen, navigateToLesson }) => {
   );
 };
 
-const TodaysPlanSection = ({ setActiveScreen, tasks: propTasks }) => {
+const TodaysPlanSection = ({ setActiveScreen, tasks: propTasks, onCheckIn }) => {
   // Use props tasks or fallback to defaults
   const tasks = propTasks || {
     checkIn: { completed: false, value: null },
@@ -615,8 +615,12 @@ const TodaysPlanSection = ({ setActiveScreen, tasks: propTasks }) => {
             </div>
           </div>
         ) : (
-          // ACTIVE STATE
-          <div className="bg-white rounded-2xl border-2 border-amber-200 p-4 shadow-sm" data-testid="check-in-card">
+          // ACTIVE STATE - Clickable
+          <button 
+            onClick={onCheckIn}
+            className="w-full bg-white rounded-2xl border-2 border-amber-200 p-4 shadow-sm text-left hover:shadow-md hover:border-amber-300 transition-all" 
+            data-testid="check-in-card"
+          >
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-full flex items-center justify-center bg-gradient-to-br from-amber-400 to-orange-400 shadow-sm">
                 <Smile size={20} className="text-white" />
@@ -629,7 +633,7 @@ const TodaysPlanSection = ({ setActiveScreen, tasks: propTasks }) => {
                 <p className="text-sm text-gray-500">How are you feeling?</p>
               </div>
             </div>
-          </div>
+          </button>
         )}
 
         {/* 2. Track Spending Card */}
