@@ -794,6 +794,9 @@ const HomeScreen = ({ setActiveScreen, navigateToLesson }) => {
 
   const fynnies = progress?.fynnies ?? 12;
   
+  // Mood check-in state
+  const [showMoodCheckIn, setShowMoodCheckIn] = useState(false);
+  
   // Transform daily tasks from backend format
   const tasks = {
     checkIn: { 
@@ -823,6 +826,7 @@ const HomeScreen = ({ setActiveScreen, navigateToLesson }) => {
   }
 
   return (
+    <>
     <div data-testid="home-screen">
       {/* Week Tracker Card - Full width, AT THE TOP (outside the 2-column area) */}
       <div className="bg-white rounded-2xl border border-gray-200 p-4 mb-4 shadow-sm" data-testid="week-tracker">
