@@ -29,7 +29,30 @@ Fynny is a Noom-inspired financial wellbeing app that helps users build healthy 
 
 ## What's Been Implemented
 
-### Date: February 11, 2026 (Latest)
+### Date: December 2025 (Latest)
+
+#### ✅ Mood Graph & Check-in Flow Fixes
+Fixed all issues with the mood visualization and check-in flow:
+
+**Mood Check-in Updates:**
+- Question updated to "How are you feeling about money today?"
+- Mood options ordered: Overwhelmed, Avoiding it, Pressured, Slightly stressed, Motivated, Calm
+- Contributing factors updated: Bills, Income instability, Comparison, Life change, Big purchase, Debt, Investment risk, Family pressure, Career uncertainty, Relationship changes
+
+**Financial Health Mood Graph Updates:**
+- Mood section now defaults to **bar chart** (matching other charts on the page)
+- Added "See full graph" button that opens a **modal with line graph**
+- Fixed SVG polyline to properly **connect dots with lines** (using viewBox 0-100 coordinate system)
+- Interactive tooltips show score, date, and notes when clicking data points
+- Legend shows mood categories: Calm/Motivated, Stressed, Overwhelmed
+
+**Files Modified:**
+- `/app/frontend/src/components/fynny/FinancialHealthScreen.jsx` - Fixed SVG line chart, bar chart default, modal for full graph
+- `/app/frontend/src/components/fynny/MoodCheckInFlow.jsx` - Already had correct mood options and factors
+
+---
+
+### Date: February 11, 2026 (Previous)
 
 #### ✅ Dynamic Lesson System Refactoring
 Refactored lesson screens to render dynamically from admin-created modules (modules → lessons → cards):
@@ -407,8 +430,8 @@ Replaced content with structure from reference project using 3 brand colors:
 ---
 
 ## Next Tasks
-1. Build Admin Panel for module/lesson/card management (CRUD UI)
-2. Add UI forms for mood check-in and spending entry
-3. Implement full JWT authentication with login/logout
-4. Build calculator implementations
-5. Add audio feature for lessons (Listen button)
+1. **Admin Panel for Module Management** (P1) - Create/edit/delete modules, lessons, cards
+2. Implement "Listen" audio feature for lessons
+3. Build calculator implementations (Savings, Budget, Debt Payoff, Emergency Fund)
+4. Add dark mode theme support
+5. Implement full JWT authentication with login/logout
