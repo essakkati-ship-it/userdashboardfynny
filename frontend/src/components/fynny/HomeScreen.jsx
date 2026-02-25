@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { GoalAchievedModal } from './CelebrationScreens';
 import { useUser } from '../../context/UserContext';
+import MoodCheckInFlow from './MoodCheckInFlow';
 
 // Desktop Right Column - New for you today (vertical stacking, aligned with lesson card)
 const DesktopMicrolearningColumn = ({ setActiveScreen }) => (
